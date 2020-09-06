@@ -2,7 +2,7 @@
 // const API_URL = 'http://localhost:5000/api/';
 
 // NGROK TUNNELING
-const API_URL = 'http://cce6c66efadf.ngrok.io' + '/api/';
+const API_URL = 'http://033641759566.ngrok.io' + '/api/';
 
 /*
 =================================================================================================================================

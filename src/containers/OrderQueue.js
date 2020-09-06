@@ -5,25 +5,14 @@ import { Styles } from '../styles/OrderQueue';
 import * as dbApi from '../api/orderApi';
 
 export default OrderQueue = (props) => {
-   // const orders = [
-   //    {
-   //       name: 'order1'
-   //    },
-   //    {
-   //       name: 'order2'
-   //    },
-   //    {
-   //       name: 'order3'
-   //    },
-   // ];
    const [orderState, setOrders] = useState([{ }]);
 
    const grabOrdersFromDb = async () => {
       const ordersFromDB = await dbApi.getAllOrders();
       setOrders(ordersFromDB);
-      return ordersFromDB;
+      // console.log(ordersFromDB);
+      // console.log(ordersFromDB.orderItems);
    }
-   // const order = grabOrdersFromDb;
 
    useEffect( () => {
       grabOrdersFromDb();
@@ -31,8 +20,7 @@ export default OrderQueue = (props) => {
 
    const currentOrders = orderState.map((obj, i) => (
       <View key={i} style={Styles.orderContainer}>
-         {/* <Order {obj}/> */}
-         <Order name={obj.name} email={obj.email}/>
+         <Order data={obj}/>
       </View>
    ));
 
