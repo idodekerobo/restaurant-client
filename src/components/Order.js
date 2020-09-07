@@ -1,27 +1,45 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Card } from 'react-native-elements';
+import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
+   // TODO - need to check if everything is undefined first before rendering
    const { firstName, lastName, orderItems, phone, email, subtotal, tax, totalCost, orderPlacedDate, completed } = props.data
    
+
    // have to check if orderItems is undefined first
    var order;
    if (orderItems) {
       order = orderItems.map( (items, i) => (
-         <View key={i}>
-            <Text>{items.name}</Text>
-         </View>
-         ));
+      <Text key={i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
+      ));
    } else {
       order = null;
    }
 
+   // TODO - color code the orders - green for completed, blue for open 
+   // TODO - add a big flag that says PAID in green or NOT PAID in red
+   // TODO - add button/logic to make it
    return (
-      <View>
-         <Text>{firstName + " " + lastName}, {email} {orderPlacedDate}</Text>
-         {order}
-         <Text>{totalCost}</Text>
-      </View>
+      // <View>
+         <Card wrapperStyle={Styles.cardWrapper} containerStyle={Styles.cardContainer}>
+            <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>{firstName + " " + lastName}</Card.Title>
+            <Card.Divider style={Styles.cardDivider}/>
+            <View style={Styles.orderInfoWrapper}>
+               <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost}</Text>
+               <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderPlacedDate}</Text>
+               <View style={Styles.orderItemDetailContainer}>
+                  <Text style={{...Styles.fontColor, fontSize: 15}}>Items:</Text>
+                  {order}
+                  <View style={{marginTop: 15}}>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
+                  </View>
+               </View>
+            </View>
+         </Card>
+      // </View>
    )
 }
 /*

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import Order from '../components/Order';
 import { Styles } from '../styles/OrderQueue';
 import * as dbApi from '../api/orderApi';
@@ -10,23 +10,22 @@ export default OrderQueue = (props) => {
    const grabOrdersFromDb = async () => {
       const ordersFromDB = await dbApi.getAllOrders();
       setOrders(ordersFromDB);
-      // console.log(ordersFromDB);
-      // console.log(ordersFromDB.orderItems);
    }
 
    useEffect( () => {
       grabOrdersFromDb();
    }, []);
 
+   // TODO - implement stack or algo to sort from newest to oldest
    const currentOrders = orderState.map((obj, i) => (
       <View key={i} style={Styles.orderContainer}>
-         <Order data={obj}/>
+         <Order key={i} data={obj}/>
       </View>
    ));
 
    return (
-      <View style={Styles.wrapperContainer}>
+      <ScrollView style={Styles.wrapperContainer} contentContainerStyle={Styles.scrollViewContent}>
          {currentOrders}
-      </View>
+      </ScrollView>
    );
 }
