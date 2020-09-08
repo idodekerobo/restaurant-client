@@ -5,36 +5,62 @@ import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
    // TODO - need to check if everything is undefined first before rendering
-   const { firstName, lastName, orderItems, phone, email, subtotal, tax, totalCost, orderPlacedDate, completed } = props.data
-   
+   const { firstName, lastName, orderItems, phone, email, subtotal, tax, totalCost, orderPlacedDate, paid, completed } = props.data
+
+   var orderDate;
+   if (orderPlacedDate) {
+      var orderDate = new Date(orderPlacedDate);
+      orderDate = orderDate.toLocaleTimeString() + ", " + orderDate.toLocaleDateString();
+   } else {
+      orderDate = orderPlacedDate;
+   }
 
    // have to check if orderItems is undefined first
    var order;
    if (orderItems) {
       order = orderItems.map( (items, i) => (
-      <Text key={i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
+      <Text key={i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price.toFixed(2)}</Text>
       ));
    } else {
       order = null;
    }
 
-   // TODO - color code the orders - green for completed, blue for open 
-   // TODO - add a big flag that says PAID in green or NOT PAID in red
-   // TODO - add button/logic to make it
+   // const paid = false;
+   
+   var orderPayStatus;
+   if (paid) orderPayStatus = {color: 'white'}
+   if (!paid) orderPayStatus = {color: '#e72325'}
+
+   var payStatus;
+   if (paid === true) {
+      payStatus = 'PAID'
+   } else {
+      payStatus = 'NOT PAID'
+   }
+
+   completedOrder = {
+      backgroundColor: '#3f51b5'
+   }
+   openOrder = {
+      backgroundColor: '#4caf50'
+      // backgroundColor: '#3f51b5'
+   }
+   // TODO - add button/logic to make it clickable. 
    return (
       // <View>
-         <Card wrapperStyle={Styles.cardWrapper} containerStyle={Styles.cardContainer}>
+         <Card wrapperStyle={Styles.cardWrapper} containerStyle={[Styles.cardContainer,(completed==true) ? completedOrder : openOrder]} >
             <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>{firstName + " " + lastName}</Card.Title>
             <Card.Divider style={Styles.cardDivider}/>
             <View style={Styles.orderInfoWrapper}>
-               <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost}</Text>
-               <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderPlacedDate}</Text>
+               <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost.toFixed(2)}</Text>
+               <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderDate}</Text>
                <View style={Styles.orderItemDetailContainer}>
+                  <Text style={[orderPayStatus, Styles.orderItemDetails]}>{payStatus}</Text>
                   <Text style={{...Styles.fontColor, fontSize: 15}}>Items:</Text>
                   {order}
                   <View style={{marginTop: 15}}>
-                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
-                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal.toFixed(2)} </Text>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax.toFixed(2)} </Text>
                   </View>
                </View>
             </View>

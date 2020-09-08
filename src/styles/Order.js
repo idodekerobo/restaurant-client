@@ -16,7 +16,6 @@ export const Styles = StyleSheet.create({
       marginBottom: 10,
       borderRadius: 5,
       borderWidth: 0,
-      backgroundColor: '#3f51b5',
    },
    cardTitle: {
       textAlign: 'left',
