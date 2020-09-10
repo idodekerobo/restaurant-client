@@ -23,6 +23,16 @@ export const Styles = StyleSheet.create({
       fontWeight: '500',
       marginBottom: 2,
    }, 
+   statusFlagContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      // marginBottom: 2,
+   },
+   statusFlag: {
+      fontStyle: 'italic',
+      fontSize: 15,
+   },
    cardDivider: {
       marginBottom: 5,
    },

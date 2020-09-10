@@ -1,7 +1,13 @@
 import React from 'react';
-import { Dimensions, SafeAreaView, Text } from 'react-native';
-import { Styles } from './styles/Dash'
+import { Dimensions } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import OrderQueue from './containers/OrderQueue'
+import OrderDetails from './screens/OrderDetails';
+
+
+const Stack = createStackNavigator();
 
 export default class Dash extends React.Component {
    constructor(props) {
@@ -20,10 +26,12 @@ export default class Dash extends React.Component {
 
    render() {
       return (
-         <SafeAreaView style={{...Styles.container, width: this.state.width, height: this.state.height}}>
-            {/* <Text>This is where you can view incoming orders for Dash!</Text> */}
-            <OrderQueue/>
-         </SafeAreaView>
+         <NavigationContainer>
+            <Stack.Navigator>
+               <Stack.Screen name="Orders" component={OrderQueue} />
+               <Stack.Screen name="OrderDetails" component={OrderDetails} />
+            </Stack.Navigator>
+         </NavigationContainer>
       );
    }
 

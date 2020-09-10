@@ -19,7 +19,7 @@ export default Order = (props) => {
    var order;
    if (orderItems) {
       order = orderItems.map( (items, i) => (
-      <Text key={i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price.toFixed(2)}</Text>
+      <Text key={i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
       ));
    } else {
       order = null;
@@ -45,6 +45,12 @@ export default Order = (props) => {
       backgroundColor: '#4caf50'
       // backgroundColor: '#3f51b5'
    }
+   var statusFlag;
+   if (completed == true) {
+      statusFlag = <Text style={[Styles.fontColor, Styles.statusFlag]}>Fulfilled</Text>
+   } else {
+      statusFlag = <Text style={[Styles.fontColor, Styles.statusFlag]}>Open</Text>
+   }
    // TODO - add button/logic to make it clickable. 
    return (
       // <View>
@@ -52,15 +58,18 @@ export default Order = (props) => {
             <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>{firstName + " " + lastName}</Card.Title>
             <Card.Divider style={Styles.cardDivider}/>
             <View style={Styles.orderInfoWrapper}>
-               <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost.toFixed(2)}</Text>
+               <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost}</Text>
                <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderDate}</Text>
                <View style={Styles.orderItemDetailContainer}>
                   <Text style={[orderPayStatus, Styles.orderItemDetails]}>{payStatus}</Text>
                   <Text style={{...Styles.fontColor, fontSize: 15}}>Items:</Text>
                   {order}
                   <View style={{marginTop: 15}}>
-                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal.toFixed(2)} </Text>
-                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax.toFixed(2)} </Text>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
+                     <View style={Styles.statusFlagContainer}>
+                        <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
+                        {statusFlag}
+                     </View>
                   </View>
                </View>
             </View>
