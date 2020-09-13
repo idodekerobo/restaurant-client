@@ -13,7 +13,6 @@ export default OrderQueue = (props) => {
 
    onPress = (id) => {
       const order = state.orders.slice().find( (order) => order._id === id);
-      // console.log(order);
       dispatch({type: SELECT_ORDER, order});
       props.navigate('OrderDetails');
    }
@@ -29,7 +28,6 @@ export default OrderQueue = (props) => {
          </TouchableOpacity>
       ));
    }
-   console.log('current global state', state.selectedOrder);
    return (
          <ScrollView style={Styles.wrapperContainer} contentContainerStyle={Styles.scrollViewContent}>
             {currentOrders}
