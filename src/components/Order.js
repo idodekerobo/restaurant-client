@@ -5,7 +5,7 @@ import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
    // TODO - need to check if everything is undefined first before rendering
-   const { firstName, lastName, orderItems, phone, email, subtotal, tax, totalCost, orderPlacedDate, paid, completed } = props.data
+   const { firstName, lastName, orderItems, phone, email, subtotal, tax, totalCost, orderPlacedDate, paid, completed, _id} = props.data
 
    var orderDate;
    if (orderPlacedDate) {

@@ -3,29 +3,36 @@ import { View, Text,  SafeAreaView, ScrollView, TouchableOpacity } from 'react-n
 import Order from '../components/Order';
 import { Styles } from '../styles/OrderQueue';
 import { GlobalContext } from '../context/GlobalState';
+import { SELECT_ORDER } from '../context/ActionCreators';
 
 export default OrderQueue = (props) => {
-   const { state } = useContext(GlobalContext);
+   const { state, dispatch } = useContext(GlobalContext);
 
    useEffect(() => {
    }, []);
 
-   onPress = () => {
-      props.navigation.navigate('OrderDetails');
+   onPress = (id) => {
+      const order = state.orders.slice().find( (order) => order._id === id);
+      // console.log(order);
+      dispatch({type: SELECT_ORDER, order});
+      props.navigate('OrderDetails');
    }
 
    // TODO - implement stack or algo to sort from newest to oldest
-   const currentOrders = state.orders.map((obj, i) => (
-      <TouchableOpacity onPress={onPress} key={i} style={Styles.orderContainer}>
-         <Order key={i} data={obj} />
-      </TouchableOpacity>
-   ));
-
+   let currentOrders;
+   if (!state.orders) {
+      currentOrders = null;
+   } else {
+      currentOrders = state.orders.map((obj) => (
+         <TouchableOpacity key={obj._id} onPress={onPress.bind(this, obj._id)} style={Styles.orderContainer}>
+            <Order data={obj} />
+         </TouchableOpacity>
+      ));
+   }
+   console.log('current global state', state.selectedOrder);
    return (
-      <SafeAreaView style={{ ...Styles.container }}>
          <ScrollView style={Styles.wrapperContainer} contentContainerStyle={Styles.scrollViewContent}>
             {currentOrders}
          </ScrollView>
-      </SafeAreaView>
    );
 }

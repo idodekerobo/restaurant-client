@@ -3,6 +3,7 @@ import { Reducer } from './AppReducer';
 
 const initialState = {
    orders: [{}],
+   selectedOrder: {},
 }
 
 // create context
