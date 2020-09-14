@@ -24,10 +24,10 @@ export const Styles = StyleSheet.create({
       marginBottom: 2,
    }, 
    statusFlagContainer: {
+      marginTop: 15,
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      // marginBottom: 2,
    },
    statusFlag: {
       fontStyle: 'italic',
@@ -35,9 +35,6 @@ export const Styles = StyleSheet.create({
    },
    cardDivider: {
       marginBottom: 5,
-   },
-   cardWrapper: {
-      
    },
    orderPrice: {
       fontSize: 24,
@@ -48,7 +45,6 @@ export const Styles = StyleSheet.create({
    },
    orderItemDetailContainer: {
       marginTop: 10,
-      marginBottom: 10, 
    },
    orderItemDetails: {
       textTransform: 'capitalize',

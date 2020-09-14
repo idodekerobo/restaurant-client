@@ -5,7 +5,7 @@ import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
    // TODO - need to check if everything is undefined first before rendering
-   const { firstName, lastName, orderItems, subtotal, tax, totalCost, orderPlacedDate, paid, completed, _id} = props.data
+   const { firstName, lastName, orderItems, subtotal, tax, totalCost, orderPlacedDate, paid, ready, pickedUp } = props.data
 
    // TODO - how to remove the seconds from the time
    let orderDate;
@@ -37,38 +37,42 @@ export default Order = (props) => {
       payStatus = 'NOT PAID'
    }
 
-   completedOrder = {
-      backgroundColor: '#3f51b5'
+   // TODO - confirm best color to signal ready v. not ready orders
+   pickedUpOrder = {
+      backgroundColor: '#3f51b5' // indigo
    }
    openOrder = {
-      backgroundColor: '#4caf50'
-      // backgroundColor: '#3f51b5'
+      backgroundColor: '#4caf50' // green
    }
+   // TODO - make sure this logic holds up
    var statusFlag;
-   if (completed == true) {
-      statusFlag = <Text style={[Styles.fontColor, Styles.statusFlag]}>Fulfilled</Text>
+   if ((ready == true) && (pickedUp == true)) {
+      statusFlag = <View><Text style={[Styles.fontColor, Styles.statusFlag]}>Ready</Text><Text style={[Styles.fontColor, Styles.statusFlag]}>Picked Up</Text></View>
+   } else if ((ready == true) && (pickedUp == false)){
+      statusFlag = <View><Text style={[Styles.fontColor, Styles.statusFlag]}>Ready</Text><Text style={[Styles.fontColor, Styles.statusFlag]}>Not Picked Up</Text></View>
    } else {
-      statusFlag = <Text style={[Styles.fontColor, Styles.statusFlag]}>Open</Text>
+      statusFlag = <View><Text style={[Styles.fontColor, Styles.statusFlag]}>Not Ready</Text><Text style={[Styles.fontColor, Styles.statusFlag]}>Not Picked Up</Text></View>
    }
-   // TODO - add button/logic to make it clickable. 
+
+   // TODO - make the dollar values go out to two decimals (have to check for undefined first or will crash the app)
    return (
       // <View>
-         <Card wrapperStyle={Styles.cardWrapper} containerStyle={[Styles.cardContainer,(completed==true) ? completedOrder : openOrder]} >
+         <Card containerStyle={[Styles.cardContainer,(pickedUp===true) ? pickedUpOrder : openOrder]} >
             <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>{firstName + " " + lastName}</Card.Title>
             <Card.Divider style={Styles.cardDivider}/>
-            <View style={Styles.orderInfoWrapper}>
+            <View>
                <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost}</Text>
                <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderDate}</Text>
                <View style={Styles.orderItemDetailContainer}>
                   <Text style={[orderPayStatus, Styles.orderItemDetails]}>{payStatus}</Text>
                   <Text style={{...Styles.fontColor, fontSize: 15}}>Items:</Text>
                   {order}
-                  <View style={{marginTop: 15}}>
-                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
-                     <View style={Styles.statusFlagContainer}>
+                  <View style={Styles.statusFlagContainer}>
+                     <View>
+                        <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
                         <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
-                        {statusFlag}
                      </View>
+                     {statusFlag}
                   </View>
                </View>
             </View>
@@ -77,11 +81,13 @@ export default Order = (props) => {
    )
 }
 /*
+ORDER JSON DATA STRUCTURE
 {
    "__v": 0,
    "_id": "5f4c8953fa1fd023ae26e607",
    "city": "Tempe",
-   "completed": false,
+   "ready": false,
+   "pickedUp": false,
    "email": "idode.kerobo@gmail.com",
    "firstName": "Idode",
    "lastName": "Kerobo",
