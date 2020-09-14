@@ -5,11 +5,12 @@ import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
    // TODO - need to check if everything is undefined first before rendering
-   const { firstName, lastName, orderItems, phone, email, subtotal, tax, totalCost, orderPlacedDate, paid, completed, _id} = props.data
+   const { firstName, lastName, orderItems, subtotal, tax, totalCost, orderPlacedDate, paid, completed, _id} = props.data
 
-   var orderDate;
+   // TODO - how to remove the seconds from the time
+   let orderDate;
    if (orderPlacedDate) {
-      var orderDate = new Date(orderPlacedDate);
+      orderDate = new Date(orderPlacedDate);
       orderDate = orderDate.toLocaleTimeString() + ", " + orderDate.toLocaleDateString();
    } else {
       orderDate = orderPlacedDate;
@@ -19,13 +20,11 @@ export default Order = (props) => {
    var order;
    if (orderItems) {
       order = orderItems.map( (items, i) => (
-      <Text key={i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
+         <Text key={(items._id) ? items._id : i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
       ));
    } else {
       order = null;
    }
-
-   // const paid = false;
    
    var orderPayStatus;
    if (paid) orderPayStatus = {color: 'white'}

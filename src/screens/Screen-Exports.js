@@ -1,4 +1,4 @@
 import OrderScreen from './OrderScreen';
-import OrderDetails from './OrderDetails';
+import OrderDetailsScreen from './OrderDetailsScreen';
 
-export { OrderDetails, OrderScreen };
+export { OrderDetailsScreen, OrderScreen };
