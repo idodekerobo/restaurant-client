@@ -5,7 +5,7 @@ export const Styles = StyleSheet.create({
       backgroundColor: 'green',
       borderRadius: 5,
       paddingTop: 13,
-      paddingBottom: 13,
+      paddingBottom: 10,
       paddingLeft: 5,
       paddingRight: 5,
    },
@@ -16,10 +16,11 @@ export const Styles = StyleSheet.create({
       textAlign: 'left',
       fontSize: 35,
       fontWeight: '500',
-      marginBottom: 2,
+      marginBottom: 5,
    },
    orderDate: {
       fontSize: 16, 
+      marginBottom: 3,
    },
    flagContainer: {
       display: 'flex',

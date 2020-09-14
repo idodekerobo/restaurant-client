@@ -47,3 +47,27 @@ export async function getAllOrders() {
    })
    .catch(err => catchBlock(err));
 }
+
+// update specific order status
+// TODO - finish api call to send updated order status to the server
+export async function updateOrderStatus(orderId, readyStatus, pickedUpStatus) {
+   const URL = API_URL + 'order/' + orderId;
+   return fetch(URL, {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+         // put stuff here to send updated data to the server
+      })
+   })
+   .then(resp => {
+      errorHandling(resp);
+      return resp.json();
+   })
+   .then(jsonData => {
+      // console.log(jsonData); // use to check what's being sent to server??
+      return jsonData
+   })
+   .catch(err => catchBlock(err));
+}
