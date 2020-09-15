@@ -2,7 +2,7 @@
 // const API_URL = 'http://localhost:5000/api/';
 
 // NGROK TUNNELING
-const API_URL = 'http://4cc6af626608.ngrok.io' + '/api/';
+const API_URL = 'http://3d2ac5191906.ngrok.io' + '/api/';
 
 /*
 =================================================================================================================================
@@ -14,6 +14,7 @@ function errorHandling(resp) {
       if (resp.status >= 400 && resp.status < 500) { // status is from 400-500 on client errors
          return resp.json().then(data => {
             let err = { errMessage: data.message };
+            console.log('This is the err', err);
             throw err;
          });
       } else { // there's a network failure or something stopping the req from completing
@@ -49,16 +50,17 @@ export async function getAllOrders() {
 }
 
 // update specific order status
-// TODO - finish api call to send updated order status to the server
-export async function updateOrderStatus(orderId, readyStatus, pickedUpStatus) {
+export async function updateOrderStatus(orderId, readyStatus, paidStatus, pickedUpStatus) {
    const URL = API_URL + 'order/' + orderId;
    return fetch(URL, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
          'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-         // put stuff here to send updated data to the server
+         ready: readyStatus,
+         paid: paidStatus,
+         pickedUp: pickedUpStatus,
       })
    })
    .then(resp => {
@@ -66,7 +68,6 @@ export async function updateOrderStatus(orderId, readyStatus, pickedUpStatus) {
       return resp.json();
    })
    .then(jsonData => {
-      // console.log(jsonData); // use to check what's being sent to server??
       return jsonData
    })
    .catch(err => catchBlock(err));

@@ -4,10 +4,14 @@ import { Styles } from '../styles/OrderDetailsHeader';
 
 const OrderDetailsHeader = ({firstName, paid, ready, pickedUp, orderPlacedDate}) => {
    const orderTime = (orderPlacedDate) ? new Date(orderPlacedDate) : '';
-
-   // TODO - conditionally style the background color of the container based on ready and pickedUp status
+   pickedUpOrder = {
+      backgroundColor: '#3f51b5' // indigo
+   }
+   openOrder = {
+      backgroundColor: '#4caf50' // green
+   }
    return (
-      <View style={Styles.container}>
+      <View style={[Styles.container, (pickedUp) ? pickedUpOrder : openOrder]}>
          <Text style={[Styles.orderName, Styles.fontColor]}>{firstName + "'s Order"}</Text>
          <Text style={[Styles.orderDate, Styles.fontColor]}>{orderTime.toLocaleTimeString() + ", " + orderTime.toLocaleDateString()}</Text>
          <View style={Styles.flagContainer}>
