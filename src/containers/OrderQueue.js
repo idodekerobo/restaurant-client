@@ -22,7 +22,7 @@ export default OrderQueue = (props) => {
    if (!state.orders) {
       currentOrders = null;
    } else {
-      currentOrders = state.orders.map((obj, i) => (
+      currentOrders = state.orders.slice().reverse().map((obj, i) => (
          <TouchableOpacity key={(obj._id) ? obj._id : i} onPress={onPress.bind(this, obj._id)} style={Styles.orderContainer}>
             <Order data={obj} />
          </TouchableOpacity>
