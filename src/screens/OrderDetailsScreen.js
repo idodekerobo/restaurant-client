@@ -4,7 +4,7 @@ import { ButtonGroup } from 'react-native-elements';
 import { GlobalContext } from '../context/GlobalState';
 import { Styles } from '../styles/OrderDetailsScreen';
 import { OrderDetailsHeader, OrderDetailsItems, OrderDetailsContact, OrderDetailsPricing } from '../components/Component-Exports';
-import * as dbApi from '../api/orderApi';
+import * as dbApi from '../api/api';
 import { FETCH_ORDERS, SELECT_ORDER } from '../context/ActionCreators';
 
 const orderStatusFunc = (order) => {

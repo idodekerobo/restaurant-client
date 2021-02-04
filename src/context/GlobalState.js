@@ -4,6 +4,8 @@ import { Reducer } from './AppReducer';
 const initialState = {
    orders: [{}],
    selectedOrder: {},
+   userSignedIn: false,
+   userUid: '',
 }
 
 // create context

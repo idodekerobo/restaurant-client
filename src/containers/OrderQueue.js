@@ -4,7 +4,7 @@ import { Order } from '../components/Component-Exports';
 import { Styles } from '../styles/OrderQueue';
 import { GlobalContext } from '../context/GlobalState';
 import { SELECT_ORDER } from '../context/ActionCreators';
-import * as dbApi from '../api/orderApi';
+import * as dbApi from '../api/api';
 import { FETCH_ORDERS } from '../context/ActionCreators';
 
 const wait = (timeout) => {

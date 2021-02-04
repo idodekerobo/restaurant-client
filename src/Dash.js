@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Dimensions } from 'react-native';
 import StackNavigator from './screens/StackNavigator';
-import * as dbApi from './api/orderApi';
+import { getAllOrders } from './api/api';
 import { GlobalContext } from './context/GlobalState';
 import {FETCH_ORDERS} from './context/ActionCreators';
 
@@ -22,7 +22,7 @@ export default class Dash extends React.Component {
    static contextType = GlobalContext;
    
    grabOrdersFromDb = async () => {
-      const orderArr = await dbApi.getAllOrders();
+      const orderArr = await getAllOrders();
       const { dispatch } = this.context;
       dispatch({ type: FETCH_ORDERS, orderArr});
    }
