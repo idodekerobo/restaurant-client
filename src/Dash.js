@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import { AuthStackNavigator, HomeStackNavigator } from './stacks/Stack-Exports';
-// import { LoadingScreen } from './screens/Screen-Exports';
+import { LoadingScreen } from './screens/Screen-Exports';
 import { checkAuthStatus } from './api/api';
 import { GlobalContext } from './context/GlobalState';
 import { SET_LOADING, SIGN_IN_USER } from './context/ActionCreators';
@@ -25,9 +24,7 @@ const Dash = () => {
 
    if (state.isLoading) {
       return (
-         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator size="large"/>
-         </View>
+         <LoadingScreen />
       ) 
    } else if (state.userSignedIn) {
       return <HomeStackNavigator />

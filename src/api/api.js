@@ -1,7 +1,5 @@
 import firebase, { auth } from '../services/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GlobalContext } from '../context/GlobalState';
-import { SET_LOADING } from '../context/ActionCreators';
 // can make this an .env variable
 // const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
@@ -37,19 +35,6 @@ function catchBlock(err) {
                                                         FIREBASE
 =================================================================================================================================
 */
-
-// ASYNC STORAGE FUNCTIONS
-// export const storeTokenInAsyncStorage = async (token) => {
-//    try {
-//       // have to stringify the object since async storage only takes string values
-//       // await AsyncStorage.setItem('userObject', JSON.stringify(user));
-//       console.log(`token in store user async function ${token}`);
-//       await AsyncStorage.setItem('userToken', token);
-//       console.log(`Saved user in async storage`);
-//    } catch (error) {
-//       console.log(`There was an error saving user in async storage ${error}`);
-//    }
-// }
 export const getUserFromAsyncStorage = async () => {
    try {
       const token = await AsyncStorage.getItem('userIdToken');
