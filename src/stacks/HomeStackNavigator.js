@@ -9,7 +9,7 @@ import { FETCH_ORDERS } from '../context/ActionCreators';
 const Stack = createStackNavigator();
 
 const HomeStackNavigator = () => {
-   const { state, dispatch } = useContext(GlobalContext);
+   const { dispatch } = useContext(GlobalContext);
    let backgroundColor = {
       backgroundColor: '#fff'
    }
@@ -21,7 +21,7 @@ const HomeStackNavigator = () => {
 
    useEffect( () => {
       grabOrdersFromDb();
-   },[state.orders])
+   },[ ])
 
    return (
       <NavigationContainer>
