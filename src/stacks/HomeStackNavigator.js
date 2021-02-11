@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { OrderScreen, OrderDetailsScreen, SignInScreen } from './Screen-Exports';
+import { OrderScreen, OrderDetailsScreen, SignInScreen } from '../screens/Screen-Exports';
 
 const Stack = createStackNavigator();
 
-export default class StackNavigator extends React.Component {
+export default class HomeStackNavigator extends React.Component {
    constructor(props) {
-      super(props); // deprecated???
+      super(props);
    }
 
    render() {
@@ -17,7 +17,7 @@ export default class StackNavigator extends React.Component {
       return (
          <NavigationContainer>
             <Stack.Navigator>
-               <Stack.Screen name="Sign In" component={SignInScreen} />
+               {/* <Stack.Screen name="Sign In" component={SignInScreen} /> */}
                <Stack.Screen name="Orders" component={OrderScreen} />
                <Stack.Screen name="Order Details" component={OrderDetailsScreen} 
                   options={{cardStyle: backgroundColor}}

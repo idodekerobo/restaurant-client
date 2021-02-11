@@ -17,10 +17,10 @@ export default Order = (props) => {
    }
 
    // have to check if orderItems is undefined first
-   var order;
+   let order;
    if (orderItems) {
       order = orderItems.map( (items, i) => (
-         <Text key={(items._id) ? items._id : i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
+         <Text key={(items._id) ? (items._id,i) : i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
       ));
    } else {
       order = null;

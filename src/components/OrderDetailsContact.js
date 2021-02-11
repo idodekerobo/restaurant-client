@@ -4,27 +4,27 @@ import { Styles } from '../styles/OrderDetailsContact';
 
 const OrderDetailsContact = ({phone, email}) => {
 
-   const windowWidth = useWindowDimensions().width;
-   let flexDirection = {}
-   if (windowWidth < 380) {
-      flexDirection = {flexDirection: 'column',}
-   } else {
-      flexDirection = {flexDirection: 'row'}
-   }
+   // const windowWidth = useWindowDimensions().width;
+   // let flexDirection = {}
+   // if (windowWidth < 380) {
+   //    flexDirection = {flexDirection: 'column',}
+   // } else {
+   //    flexDirection = {flexDirection: 'row'}
+   // }
 
    // TODO - style the phone number so it looks like aaa-bbb-cccc
    // function spliceString(str, index, count, add) {
    // }
    return (
-      <View style={[Styles.container, flexDirection]}>
-         <View style={Styles.emailContainer}>
-            <Text style={Styles.emailLabel}>Email:</Text>
-            <Text style={Styles.email}>{email}</Text>
+      <View style={[Styles.container]}>
+         <View style={Styles.contactContainer}>
+            <Text style={Styles.contactLabel}>Email</Text>
+            <Text style={Styles.contactInfo}>{email}</Text>
          </View>
 
-         <View style={Styles.phoneContainer}>
-            <Text style={Styles.phoneLabel}>Phone:</Text>
-            <Text style={Styles.phone}>{phone}</Text>
+         <View style={Styles.contactContainer}>
+            <Text style={Styles.contactLabel}>Phone</Text>
+            <Text style={Styles.contactInfo}>{phone}</Text>
          </View>
       </View>
    );

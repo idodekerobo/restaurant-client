@@ -5,7 +5,8 @@ const initialState = {
    orders: [{}],
    selectedOrder: {},
    userSignedIn: false,
-   userUid: '',
+   userIdToken: null,
+   isLoading: true,
 }
 
 // create context

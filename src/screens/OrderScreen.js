@@ -9,9 +9,7 @@ export default OrderScreen = (props) => {
 
    return (
       <SafeAreaView style={{ ...Styles.container }}>
-         {/* <View > */}
-            <Button containerStyle={styles.loginButton} onPress={checkAuthStatus} title="CLICK"/>
-         {/* </View> */}
+         {/* <Button containerStyle={styles.loginButton} onPress={checkAuthStatus} title="CLICK"/> */}
          <OrderQueue navigate={props.navigation.navigate}/>
       </SafeAreaView>
    )

@@ -3,26 +3,37 @@ import { StyleSheet } from 'react-native';
 export const Styles = StyleSheet.create({
    container: {
       display: 'flex',
+      flex: 1,
       justifyContent: 'space-between',
-      marginTop: 10,
-      // flexDirection: 'row', // conditionally styling in line
+      alignItems: 'flex-start',
+      marginTop: 20,
+      paddingTop: 10,
+      paddingLeft: 15,
+      paddingRight: 10,
+      backgroundColor: '#fafafc',
+      // borderRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: {
+         width: 0,
+         height: 5,
+      },
+      shadowOpacity: 0.36,
+      shadowRadius: 6.68,
+      elevation: 11,
    },
-   emailContainer: {
-      marginBottom: 10,
+   contactContainer: {
+      flex: 1,
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
    },
-   emailLabel: {
-      fontSize: 16,
+   contactLabel: {
+      // paddingLeft:
+      fontSize: 24,
+      fontWeight: 'bold',
    },
-   email: {
-      fontSize: 20,
-   },
-   phoneContainer: {
-      marginBottom: 10,
-   },
-   phoneLabel: {
-      fontSize: 16,
-   },
-   phone: {
-      fontSize: 20,
+   contactInfo: {
+      fontSize: 28,
    },
 });

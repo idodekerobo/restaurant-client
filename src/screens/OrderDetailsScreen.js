@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { SafeAreaView, ScrollView, RefreshControl } from 'react-native';
+import { View, SafeAreaView, ScrollView, RefreshControl, Dimensions } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import { GlobalContext } from '../context/GlobalState';
 import { Styles } from '../styles/OrderDetailsScreen';
@@ -36,12 +36,13 @@ const OrderDetailsScreen = (props) => {
 
       // 3. grab the neeeded order using selectedId n update the currently rendered order
       updateOrder(updatedOrder);
+      // console.log(order.orderItems);
       
       wait(2000).then( () => setRefreshing(false));
    }
 
    const [orderStatus, updateOrderStatus] = useState(orderStatusFunc(order));
-   const buttons = ['Not Ready', 'Ready', 'Fulfilled'];
+   const buttons = ['Not Ready', 'Ready', 'Picked Up'];
    
    const orderStatusOnPress = async (i) => {
       if (i === orderStatus) return; // if the index press is already selected do nothing
@@ -57,9 +58,11 @@ const OrderDetailsScreen = (props) => {
       }
       onRefresh();
    }
+   // const screenHeight = Dimensions.get('window').height
    return (
-      <SafeAreaView style={Styles.container}>
-         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
+      <SafeAreaView style={[Styles.container]}>
+      {/* <View style={Styles.container}> */}
+         <ScrollView style={Styles.scrollViewContainer} contentContainerStyle={Styles.scrollViewContent} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
             <OrderDetailsHeader firstName={order.firstName} lastName={order.lastName} paid={order.paid} ready={order.ready} pickedUp={order.pickedUp} orderPlacedDate={order.orderPlacedDate} />
             <OrderDetailsContact phone={order.phone} email={order.email} />
             <OrderDetailsItems items={order.orderItems}/>
@@ -69,8 +72,14 @@ const OrderDetailsScreen = (props) => {
                buttons={buttons}
                onPress={orderStatusOnPress}
                selectedIndex={orderStatus}
+               containerStyle={Styles.buttonGroupContainer}
+               textStyle={Styles.buttonGroupTextStyle}
+               buttonStyle={Styles.buttonGroupStyle}
+               selectedButtonStyle={Styles.selectedButtonStyle}
+               innerBorderStyle={{width: 3}}
             />
          </ScrollView>
+      {/* </View> */}
       </SafeAreaView>
    );
 }

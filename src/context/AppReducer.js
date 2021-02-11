@@ -1,4 +1,4 @@
-import { FETCH_ORDERS, SELECT_ORDER, SIGN_IN_USER, SIGN_OUT_USER } from './ActionCreators';
+import { FETCH_ORDERS, SELECT_ORDER, SIGN_IN_USER, SIGN_OUT_USER, SET_LOADING } from './ActionCreators';
 export const Reducer = (state, action) => {
    switch (action.type) {
       case FETCH_ORDERS: 
@@ -11,12 +11,17 @@ export const Reducer = (state, action) => {
             ...state,
             selectedOrder: action.order
          }
+      case SET_LOADING:
+         return {
+            ...state,
+            isLoading: action.isLoading,
+         }
       case SIGN_IN_USER: 
          return {
             ...state,
             // sign in user
             userSignedIn: action.userSignedIn,
-            userUid: action.userUid
+            // userIdToken: action.userIdToken
          }
       case SIGN_OUT_USER:
          // clean the state
@@ -24,7 +29,7 @@ export const Reducer = (state, action) => {
             orders: [{}],
             selectedOrder: {},
             userSignedIn: false,
-            userUid: '',
+            userIdToken: null,
          }
       default: 
          return state;

@@ -1,8 +1,11 @@
 import firebase, { auth } from '../services/firebase'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GlobalContext } from '../context/GlobalState';
+import { SET_LOADING } from '../context/ActionCreators';
 // can make this an .env variable
 // const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-const API_URL = 'https://1022ebf236a0.ngrok.io' + '/api/';
+const API_URL = 'https://f68c251c5c3d.ngrok.io' + '/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING
@@ -35,153 +38,64 @@ function catchBlock(err) {
 =================================================================================================================================
 */
 
-// send sign in credentials to firebase
-export async function login(email, password, navigationProp, nextScreen) {
-   
-   // this endpoint will need to check if credentials are valid
-   // const URL = API_URL + 'login/';
-   // Firebase.
-   auth()
-   .signInWithEmailAndPassword(email, password)
-   .then( (fbObj) => {
-      console.log('sign-in worked');
-      console.log(fbObj)
-      // console.log(`this is the user ${fbObj.user}`);
-      navigationProp.navigate(nextScreen);
-      return fbObj.user.getIdToken();
-   })
-   .then(token => {
-      // console.log(`token ${token}`)
-   })
-   .catch(err => {
-      // Handle Errors here.
-      console.log('there was some type of error');
-      let errorCode = err.code;
-      let errorMessage = err.message;
-      console.log(`this is the error code ${errorCode}`);
-      console.log(`this is the error message ${errorMessage}`)
-      switch (err.code) {
-         case "auth/invalid-email":
-         case "auth/user-disabled":
-         case "auth/user-not-found":
-            // set the error for all three
-            break;
-         case "auth/wrong-password":
-            // set password error message
-            break;
+// ASYNC STORAGE FUNCTIONS
+// export const storeTokenInAsyncStorage = async (token) => {
+//    try {
+//       // have to stringify the object since async storage only takes string values
+//       // await AsyncStorage.setItem('userObject', JSON.stringify(user));
+//       console.log(`token in store user async function ${token}`);
+//       await AsyncStorage.setItem('userToken', token);
+//       console.log(`Saved user in async storage`);
+//    } catch (error) {
+//       console.log(`There was an error saving user in async storage ${error}`);
+//    }
+// }
+export const getUserFromAsyncStorage = async () => {
+   try {
+      const token = await AsyncStorage.getItem('userIdToken');
+      if (token !== null) {
+         return token;
       }
-   });
+      console.log(`token is null`)
+   } 
+   catch (e) {
+      console.log(`error: ${e}`)
+   }
 }
+
 
 export async function checkAuthStatus() {
-   // firebase.auth().onAuthStateChanged(user => {
-   //    if (user) console.log(`logged in`)
-   // })
-
    let URL = API_URL + 'auth/';
-   const idToken = await firebase.auth().currentUser.getIdToken();
-
-   console.log();
-   console.log(`id token ${idToken}`);
-   console.log();
-
-   fetch(URL, {
-      method: 'GET', 
-      headers: new Headers({
-         'Content-type': 'application/json',
-         Authorization: `Bearer ${idToken}`,
-      })
-   })
-   .then(res => {
-      return res.data;
-   })
-
-   // let token;
-   // if (loggedIn) token = await firebase.auth().currentUser.getIdToken();
-   // console.log(`token ${token}`);
-}
-
-
-export async function retrieveAuthToken() {
-   const URL = API_URL + 'auth/';
-   firebase
-   .auth()
-   .currentUser.getIdToken(/* forceRefresh */ true)
-   .then(idToken => {
-      // send idToken to backend via https
-      return fetch(URL, {
-         method: 'GET',
-         headers: new Headers({
-            'Content-type': 'application/json',
-            Authorization: `Bearer ${idToken}`
-         }),
-         // body: JSON.stringify(idToken)
-      })
-      // DO I NEED THIS
-      .then(resp => {
-         errorHandling(resp);
-         // console.log(`resp ${resp}`);
-         // console.log(`resp stringify ${JSON.stringify(resp)}`);
-         // console.log(`resp.json ${resp.json()}`);
-         // console.log(`resp.json stringify ${JSON.stringify(resp.json())}`);
-         return resp.json({resp}); // if response is okay then convert to json and return
-      })
-      // DO I NEED THIS
-      .then(jsonData => {
-         console.log(`jsondata ${jsonData}`);
-         return jsonData; // take that jsondata and return it 
-      })
-      .catch(err => {
-         console.log(`error in fetch`)
-         console.log(`error code ${err.code}`);
-         console.log(`error message ${err.message}`);
-         catchBlock(err)
-      });
-   })
-   .catch(err => {
-      console.log(`error in firebase method`)
-      catchBlock(err)
-   });
+   let idToken;
    
+   try {
+      const idToken = await getUserFromAsyncStorage(); // this isn't waiting
+      if (idToken !== null) {
+         // console.log(`this is the id token will check firebase if it's valid next ${idToken}`)
+         try {
+            const response = await fetch(URL, {
+               method: 'GET', 
+               headers: new Headers({
+                  'Content-type': 'application/json',
+                  Authorization: `Bearer ${idToken}`,
+               })
+            })
+            const authObject = await response.json();
+            return authObject;
+         } catch (e) {
+            console.log(`error.code ${e.code}`)
+            console.log(`error msg ${e.message}`);
+            console.log(`full error ${e}`)
+            return res.status(401).send({error: 'There was an error checking token on server.'});
+         }
+      } else {
+         let result = 'not authorized';
+         return result;
+      }
+   } catch (e) {
+      console.log(`There was an error in checkAuthStatus function: ${e}`);
+   }
 }
-
-/*
-export function createUser(email, password) {
-   firebase.auth().createUserWithEmailAndPassword(email, password)
-   .then( ({user}) => {
-      return user.getIdToken().then( (idToken) => {
-         return fetch("/loginSession", {
-            method: 'POST', 
-            headers: {
-               Accept: 'application/json', 
-               "Content-Type": "application/json",
-               // defend against CSRF attacks
-               // "CSRF-Token": Cookies.get("XSRF-TOKEN")
-            },
-            body: JSON.stringify({idToken})
-         })
-      })
-   })
-   .then( () => {
-      return firebase.auth().signOut();
-   })
-   .then( () => {
-      // window.location.assign("/some-page?");
-   })
-}
-*/
-
-// export function authListener() {
-//    firebase
-//    .auth()
-//    .onAuthStateChanged( (user) => {
-//       if (user) {
-//          console.log('user is signed in');
-//       } else {
-//          console.log('user is signed out');
-//       }
-//    });
-// }
 
 /*
 =================================================================================================================================

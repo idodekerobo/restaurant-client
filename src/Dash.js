@@ -1,39 +1,38 @@
-import React from 'react';
-// import { Dimensions } from 'react-native';
-import StackNavigator from './screens/StackNavigator';
-import { getAllOrders } from './api/api';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { AuthStackNavigator, HomeStackNavigator } from './stacks/Stack-Exports';
+// import { LoadingScreen } from './screens/Screen-Exports';
+import { checkAuthStatus } from './api/api';
 import { GlobalContext } from './context/GlobalState';
-import {FETCH_ORDERS} from './context/ActionCreators';
+import { SET_LOADING, SIGN_IN_USER } from './context/ActionCreators';
 
-export default class Dash extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-         // to manage orientation flip from portrait to landscape
-         // width: Dimensions.get('window').width,
-         // height: Dimensions.get('window').height,
-      }
-
-      // to manage orientation flip from portrait to landscape
-      // Dimensions.addEventListener("change", e => {
-      //    this.setState(e.window);
-      // })
-   }
-   static contextType = GlobalContext;
+const Dash = () => {
+   const { state, dispatch } = useContext(GlobalContext);   
    
-   grabOrdersFromDb = async () => {
-      const orderArr = await getAllOrders();
-      const { dispatch } = this.context;
-      dispatch({ type: FETCH_ORDERS, orderArr});
+   const authFunction = async () => {
+      const auth = await checkAuthStatus();
+      if (auth.authStatus === 'authorized') {
+         dispatch({type: SET_LOADING, isLoading: false});
+         dispatch({type: SIGN_IN_USER, userSignedIn: true});
+      } else if (auth.authStatus === 'not authorized') {
+         dispatch({type: SET_LOADING, isLoading: false});
+      }
    }
 
-   componentDidMount() {
-      this.grabOrdersFromDb();
-   }
+   useEffect( () => {
+      authFunction();
+   }, [])
 
-   render() {
+   if (state.isLoading) {
       return (
-         <StackNavigator/>
-      );
-   }
+         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large"/>
+         </View>
+      ) 
+   } else if (state.userSignedIn) {
+      return <HomeStackNavigator />
+   } else {
+      return <AuthStackNavigator />
+   } 
 }
+export default Dash;
