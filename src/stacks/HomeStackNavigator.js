@@ -1,29 +1,37 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { OrderScreen, OrderDetailsScreen, SignInScreen } from '../screens/Screen-Exports';
+import { OrderScreen, OrderDetailsScreen } from '../screens/Screen-Exports';
+import { getAllOrders } from '../api/api';
+import { GlobalContext } from '../context/GlobalState';
+import { FETCH_ORDERS } from '../context/ActionCreators';
 
 const Stack = createStackNavigator();
 
-export default class HomeStackNavigator extends React.Component {
-   constructor(props) {
-      super(props);
+const HomeStackNavigator = () => {
+   const { state, dispatch } = useContext(GlobalContext);
+   let backgroundColor = {
+      backgroundColor: '#fff'
    }
 
-   render() {
-      let backgroundColor = {
-         backgroundColor: '#fff'
-      }
-      return (
-         <NavigationContainer>
-            <Stack.Navigator>
-               {/* <Stack.Screen name="Sign In" component={SignInScreen} /> */}
-               <Stack.Screen name="Orders" component={OrderScreen} />
-               <Stack.Screen name="Order Details" component={OrderDetailsScreen} 
-                  options={{cardStyle: backgroundColor}}
-               />
-            </Stack.Navigator>
-         </NavigationContainer>
-      );
+   const grabOrdersFromDb = async () => {
+      const orderArr = await getAllOrders();
+      dispatch({ type: FETCH_ORDERS, orderArr});
    }
+
+   useEffect( () => {
+      grabOrdersFromDb();
+   },[state.orders])
+
+   return (
+      <NavigationContainer>
+         <Stack.Navigator>
+            <Stack.Screen name="Orders" component={OrderScreen} />
+            <Stack.Screen name="Order Details" component={OrderDetailsScreen} 
+               options={{cardStyle: backgroundColor}}
+            />
+         </Stack.Navigator>
+      </NavigationContainer>
+   );
 }
+export default HomeStackNavigator;

@@ -1,9 +1,9 @@
 import firebase, { auth } from '../services/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // can make this an .env variable
-// const API_URL = 'http://localhost:5000/api/';
+const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-const API_URL = 'https://f68c251c5c3d.ngrok.io' + '/api/';
+// const API_URL = 'https://f68c251c5c3d.ngrok.io' + '/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING
