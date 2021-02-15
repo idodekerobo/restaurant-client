@@ -15,6 +15,9 @@ const Dash = () => {
          dispatch({type: SIGN_IN_USER, userSignedIn: true});
       } else if (auth.authStatus === 'not authorized') {
          dispatch({type: SET_LOADING, isLoading: false});
+      } else if (auth.authStatus === undefined) {
+         console.log(`checkAuthStatus returned undefined`);
+         dispatch({type: SET_LOADING, isLoading: false});
       }
    }
 

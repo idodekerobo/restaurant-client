@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, SafeAreaView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Input, Text, Button } from 'react-native-elements';
 import { useForm, Controller } from "react-hook-form";
 import { GlobalContext } from '../context/GlobalState';
@@ -32,8 +33,9 @@ const SignInScreen = ({ navigation }) => {
          .catch(err => {
             console.log(`There was an error returning the idToken ${err}`)
          });
-         // navigate to next screen if it works by indicating that user is signed in
-         dispatch({type: SIGN_IN_USER, userSignedIn: true})
+         // navigate to next screen if it works by indicating that user is signed in which changes state and triggers rerender
+            // also saving uuid in universal state for later use
+         dispatch({type: SIGN_IN_USER, userSignedIn: true, userUid: user.uid})
       })
       .catch(err => {
          // Handle Errors here.
@@ -57,8 +59,10 @@ const SignInScreen = ({ navigation }) => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
-         {/* <View> */}
+      <KeyboardAwareScrollView
+      style={{backgroundColor:'#efeff2'}}
+      resetScrollToCoords={{x:0, y:0}}
+      contentContainerStyle={styles.container}>
 
          <View style={styles.headerContainer}>
             <Text h4 h4Style={styles.header}>Log In!</Text>
@@ -99,9 +103,8 @@ const SignInScreen = ({ navigation }) => {
 
             <Button containerStyle={styles.loginButton} title="Log In" onPress={handleSubmit(onSubmit)} />
          </View>
-         {/* </View> */}
 
-      </SafeAreaView>
+      </KeyboardAwareScrollView>
    )
 }
 export default SignInScreen;

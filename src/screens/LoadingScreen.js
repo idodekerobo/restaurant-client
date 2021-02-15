@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, View, ActivityIndicator, SafeAreaView, Text } from 'react-native';
-import { GlobalContext } from '../context/GlobalState';
+import React from 'react';
+import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 
 const LoadingScreen = (props) => {   
    return (
       <View style={{backgroundColor: '#c5d9e6',flex: 1, alignItems: 'center'}}>
-         <Text style={styles.header}>RHEMI</Text>
+         <Text style={styles.header}>R H E M I</Text>
          <ActivityIndicator size="large"/>
       </View>
    )

@@ -21,6 +21,7 @@ export const Reducer = (state, action) => {
             ...state,
             // sign in user
             userSignedIn: action.userSignedIn,
+            userUid: action.userUid,
             // userIdToken: action.userIdToken
          }
       case SIGN_OUT_USER:
