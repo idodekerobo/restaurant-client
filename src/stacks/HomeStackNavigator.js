@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 // react navigation imports
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // component imports
-import { OrderScreen, OrderDetailsScreen } from '../screens/Screen-Exports';
+import { ProfileScreen } from '../screens/Screen-Exports';
+import { OrderStackNavigator } from '../stacks/Stack-Exports';
 
 // api imports
 import { API_URL, getAllOrders } from '../api/api';
@@ -21,15 +22,13 @@ import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants'
 import { State } from 'react-native-gesture-handler';
+
 const PUSH_TOKEN_ENDPOINT = API_URL + 'saveToken/'
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const HomeStackNavigator = () => {
-   const { state, dispatch } = useContext(GlobalContext);
-   let backgroundColor = {
-      backgroundColor: '#fff'
-   }
+   const { dispatch } = useContext(GlobalContext);
 
    const grabOrdersFromDb = async () => {
       const orderArr = await getAllOrders();
@@ -88,17 +87,15 @@ const HomeStackNavigator = () => {
 
    useEffect( () => {
       registerForPushNotificationsAsync();
-      // grabOrdersFromDb();
+      grabOrdersFromDb();
    },[ ])
 
    return (
       <NavigationContainer>
-         <Stack.Navigator>
-            <Stack.Screen name="Orders" component={OrderScreen} />
-            <Stack.Screen name="Order Details" component={OrderDetailsScreen} 
-               options={{cardStyle: backgroundColor}}
-            />
-         </Stack.Navigator>
+         <Tab.Navigator>
+            <Tab.Screen name="Orders" component={OrderStackNavigator} />
+            <Tab.Screen name="Profile" component={ProfileScreen} />
+         </Tab.Navigator>
       </NavigationContainer>
    );
 }
