@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Input, Text, Button } from 'react-native-elements';
@@ -10,11 +10,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({ navigation }) => {
    const { control, handleSubmit, errors } = useForm();
+   const [ loginError, setLoginError ] = useState('');
+
    const { dispatch } = useContext(GlobalContext);
    const onSubmit = data => {
       let idToken;
       firebase.auth().signInWithEmailAndPassword(data.email, data.password)
       .then(userCredential => {
+         setLoginError('');
          const user = userCredential.user;
          // get id token
          user.getIdToken()
@@ -45,6 +48,7 @@ const SignInScreen = ({ navigation }) => {
          let errorMessage = err.message;
          console.log(`this is the error code ${errorCode}`);
          console.log(`this is the error message ${errorMessage}`)
+         setLoginError(errorMessage);
          switch (err.code) {
             case "auth/invalid-email":
             case "auth/user-disabled":
@@ -100,6 +104,7 @@ const SignInScreen = ({ navigation }) => {
                rules={{ required: true }}
                defaultValue=""
             />
+            <Text style={styles.loginErrorText}>{ loginError }</Text>
 
             <Button containerStyle={styles.loginButton} title="Log In" onPress={handleSubmit(onSubmit)} />
          </View>
@@ -138,5 +143,8 @@ const styles = StyleSheet.create({
       marginTop: 20,
       marginLeft: 'auto',
       marginRight: 'auto',
+   },
+   loginErrorText: {
+      color: 'red',
    },
 });

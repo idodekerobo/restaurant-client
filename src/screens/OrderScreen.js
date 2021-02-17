@@ -1,16 +1,20 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import OrderQueue from '../containers/OrderQueue';
-import { Styles } from '../styles/OrderQueue';
 
 export default OrderScreen = (props) => {
 
    return (
-      <SafeAreaView style={{ ...Styles.container }}>
+      <SafeAreaView style={styles.container}>
          <OrderQueue navigate={props.navigation.navigate}/>
       </SafeAreaView>
    )
 }
 const styles = StyleSheet.create({
-   
+   container: {
+      flex: 1,
+      backgroundColor: '#ededf0',
+      alignItems: 'center',
+      justifyContent: 'center',
+   },
 })

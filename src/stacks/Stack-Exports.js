@@ -1,5 +1,5 @@
 import AuthStackNavigator from './AuthStackNavigator'
-import HomeStackNavigator from './HomeStackNavigator';
-import OrderStackNavigator from './OrderStackNavigator';
+import HomeTabNavigator from './HomeTabNavigator';
+// import OrderStackNavigator from '../screens/OrderStackNavigator'; // not import/exporting from here so there isn't a require cycle w/ react navigation
 
-export { AuthStackNavigator, HomeStackNavigator, OrderStackNavigator };
+export { AuthStackNavigator, HomeTabNavigator };

@@ -52,6 +52,7 @@ export default OrderQueue = (props) => {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
          >
             {currentOrders}
+            {currentOrders}
          </ScrollView>
    );
 }

@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // component imports
 import { ProfileScreen } from '../screens/Screen-Exports';
-import { OrderStackNavigator } from '../stacks/Stack-Exports';
+import OrderStackNavigator from './OrderStackNavigator';
 
 // api imports
 import { API_URL, getAllOrders } from '../api/api';
@@ -27,12 +27,18 @@ const PUSH_TOKEN_ENDPOINT = API_URL + 'saveToken/'
 
 const Tab = createBottomTabNavigator();
 
-const HomeStackNavigator = () => {
+const HomeTabNavigator = () => {
    const { dispatch } = useContext(GlobalContext);
 
    const grabOrdersFromDb = async () => {
-      const orderArr = await getAllOrders();
-      dispatch({ type: FETCH_ORDERS, orderArr});
+      firebase.auth().onAuthStateChanged(async user => {
+         if (user) {
+            const idToken = await user.getIdToken()
+            if (idToken.authStatus == 'not authorized') return;
+            const orderArr = await getAllOrders(idToken);
+            dispatch({ type: FETCH_ORDERS, orderArr});
+         }
+      });
    }
 
    // this should be done at sign in since it'll be associated w/ the restaurant that signed in
@@ -51,12 +57,11 @@ const HomeStackNavigator = () => {
       // TODO - make this check if the same token is already present in async storage. if yes, short circuit the function
       const token = await Notifications.getExpoPushTokenAsync();
 
-      // context api doesn't persist when you exit the app like async storage does      
+      // sending push token of device to the server to make sure that the user is notified when orders come in to the server
       // using onAuthStateChanged to make sure it waits until firebase is initialized
       firebase.auth().onAuthStateChanged(async user => {
          if (user) {
             try {
-               // TODO - need to make sure that state.userUid sends. didn't work when device was reloaded but already signed in w/ userIdtoken from async storage
                const response = await fetch(PUSH_TOKEN_ENDPOINT, {
                   method: 'POST',
                   headers: {
@@ -87,16 +92,23 @@ const HomeStackNavigator = () => {
 
    useEffect( () => {
       registerForPushNotificationsAsync();
-      grabOrdersFromDb();
+      // grabOrdersFromDb();
    },[ ])
 
    return (
       <NavigationContainer>
-         <Tab.Navigator>
+         <Tab.Navigator
+            tabBarOptions={{
+               activeTintColor: 'black',
+               labelStyle: {
+                  fontSize: 20
+               }
+            }}
+         >
             <Tab.Screen name="Orders" component={OrderStackNavigator} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
          </Tab.Navigator>
       </NavigationContainer>
    );
 }
-export default HomeStackNavigator;
+export default HomeTabNavigator;

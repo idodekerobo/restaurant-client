@@ -87,7 +87,6 @@ export async function checkAuthStatus() {
    }
 }
 
-// TODO - need to make this auto refresh after signing out
 export async function signOutUser() {
    // need to remove push token of device from restaurant object on the database
    const URL = API_URL + 'signout'   
@@ -141,10 +140,16 @@ export async function signOutUser() {
 =================================================================================================================================
 */
 // get all orders
-export async function getAllOrders() {
+export async function getAllOrders(idToken) {
 
    const URL = API_URL + 'order/';
-   return fetch(URL, {method: 'GET'})
+   return fetch(URL, {
+      method: 'GET',
+      headers: new Headers({
+         'Content-type': 'application/json',
+         Authorization: `Bearer ${idToken}`,
+      })
+   })
    .then(resp => {
       errorHandling(resp);
       return resp.json(); // if response is okay then convert to json and return

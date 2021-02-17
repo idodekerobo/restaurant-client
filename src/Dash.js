@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthStackNavigator, HomeStackNavigator } from './stacks/Stack-Exports';
+import React, { useContext, useEffect } from 'react';
+import { AuthStackNavigator, HomeTabNavigator } from './stacks/Stack-Exports';
 import { LoadingScreen } from './screens/Screen-Exports';
 import { checkAuthStatus } from './api/api';
 import { GlobalContext } from './context/GlobalState';
@@ -30,7 +30,7 @@ const Dash = () => {
          <LoadingScreen />
       ) 
    } else if (state.userSignedIn) {
-      return <HomeStackNavigator />
+      return <HomeTabNavigator />
    } else {
       return <AuthStackNavigator />
    } 

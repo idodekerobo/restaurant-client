@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Card, Badge } from 'react-native-elements';
 import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
@@ -18,66 +18,72 @@ export default Order = (props) => {
 
    // have to check if orderItems is undefined first
    let order;
+   // if (orderItems) {
+   //    order = orderItems.map( (items, i) => (
+   //       <Text key={(items._id) ? (items._id,i) : i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
+   //    ));
+   // } else {
+   //    order = null;
+   // }
    if (orderItems) {
-      order = orderItems.map( (items, i) => (
-         <Text key={(items._id) ? (items._id,i) : i} style={[Styles.fontColor, Styles.orderItemDetails]}>{items.name}, ${items.price}</Text>
-      ));
-   } else {
-      order = null;
+      order = orderItems.length;
    }
    
-   var orderPayStatus;
+   let orderPayStatus;
    if (paid) orderPayStatus = {color: 'white'}
    if (!paid) orderPayStatus = {color: '#e72325'}
 
-   var payStatus;
+   let payStatus;
+   let badgeStatus;
    if (paid === true) {
-      payStatus = 'PAID'
+      payStatus = 'PAID';
+      badgeStatus = 'success';
    } else {
-      payStatus = 'NOT PAID'
+      payStatus = 'NOT PAID';
+      badgeStatus = 'error';
    }
 
-   // TODO - confirm best color to signal ready v. not ready orders
-   pickedUpOrder = {
-      backgroundColor: '#3f51b5' // indigo
-   }
-   openOrder = {
-      backgroundColor: '#4caf50' // green
-   }
    // TODO - make sure this logic holds up
-   var statusFlag;
+   let statusFlag;
    if ((ready == true) && (pickedUp == true)) {
-      statusFlag = <View><Text style={[Styles.fontColor, Styles.statusFlag]}>Ready</Text><Text style={[Styles.fontColor, Styles.statusFlag]}>Picked Up</Text></View>
+      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Ready" status="primary" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} /><Badge value="Picked Up" status="success" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
    } else if ((ready == true) && (pickedUp == false)){
-      statusFlag = <View><Text style={[Styles.fontColor, Styles.statusFlag]}>Ready</Text><Text style={[Styles.fontColor, Styles.statusFlag]}>Not Picked Up</Text></View>
+      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Ready" status="primary" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} /><Badge value="Not Picked Up" status="warning" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
    } else {
-      statusFlag = <View><Text style={[Styles.fontColor, Styles.statusFlag]}>Not Ready</Text><Text style={[Styles.fontColor, Styles.statusFlag]}>Not Picked Up</Text></View>
+      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Not Ready" status="warning" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/><Badge value="Not Picked Up" status="warning"badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
    }
 
    // TODO - make the dollar values go out to two decimals (have to check for undefined first or will crash the app)
    return (
-      // <View>
-         <Card containerStyle={[Styles.cardContainer,(pickedUp===true) ? pickedUpOrder : openOrder]} >
-            <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>{firstName + " " + lastName}</Card.Title>
-            <Card.Divider style={Styles.cardDivider}/>
-            <View>
-               <Text style={[Styles.orderPrice, Styles.fontColor]}>Total: ${totalCost}</Text>
-               <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderDate}</Text>
-               <View style={Styles.orderItemDetailContainer}>
-                  <Text style={[orderPayStatus, Styles.orderItemDetails]}>{payStatus}</Text>
-                  <Text style={{...Styles.fontColor, fontSize: 15}}>Items:</Text>
-                  {order}
-                  <View style={Styles.statusFlagContainer}>
-                     <View>
-                        <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
-                        <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
-                     </View>
-                     {statusFlag}
+      <Card containerStyle={[Styles.cardContainer]} >
+         <View style={Styles.cardTitleContainer}>
+            <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>
+               <Text style={Styles.cardTitle}>{firstName + " " + lastName}</Text>
+            </Card.Title>
+            <Card.Title style={[Styles.cardTitle, Styles.fontColor]}>
+               <Text style={Styles.cardTitle}>${totalCost}</Text>
+            </Card.Title>
+         </View>
+         <Card.Divider style={Styles.cardDivider}/>
+         <View>
+            <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderDate}</Text>
+            <View style={Styles.badgeContainer}>
+               <Badge status={badgeStatus} value={payStatus} badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/>
+               {statusFlag}
+            </View>
+            <View style={Styles.orderItemDetailContainer}>
+               <Text style={{...Styles.fontColor, fontSize: 18}}>Items: {order}</Text>
+               
+               <View style={Styles.pricingContainer}>
+                  <View>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
+                     <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
                   </View>
+                  
                </View>
             </View>
-         </Card>
-      // </View>
+         </View>
+      </Card>
    )
 }
 /*

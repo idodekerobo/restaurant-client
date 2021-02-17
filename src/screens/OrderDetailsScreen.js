@@ -58,10 +58,9 @@ const OrderDetailsScreen = (props) => {
       }
       onRefresh();
    }
-   // const screenHeight = Dimensions.get('window').height
+   
    return (
       <SafeAreaView style={[Styles.container]}>
-      {/* <View style={Styles.container}> */}
          <ScrollView style={Styles.scrollViewContainer} contentContainerStyle={Styles.scrollViewContent} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
             <OrderDetailsHeader firstName={order.firstName} lastName={order.lastName} paid={order.paid} ready={order.ready} pickedUp={order.pickedUp} orderPlacedDate={order.orderPlacedDate} />
             <OrderDetailsContact phone={order.phone} email={order.email} />
@@ -79,7 +78,6 @@ const OrderDetailsScreen = (props) => {
                innerBorderStyle={{width: 3}}
             />
          </ScrollView>
-      {/* </View> */}
       </SafeAreaView>
    );
 }
