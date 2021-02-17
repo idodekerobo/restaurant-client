@@ -92,7 +92,7 @@ const HomeTabNavigator = () => {
 
    useEffect( () => {
       registerForPushNotificationsAsync();
-      // grabOrdersFromDb();
+      grabOrdersFromDb();
    },[ ])
 
    return (
