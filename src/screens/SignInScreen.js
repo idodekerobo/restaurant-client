@@ -7,31 +7,74 @@ import { GlobalContext } from '../context/GlobalState';
 import { SIGN_IN_USER } from '../context/ActionCreators';
 import firebase from '../services/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { sendIdTokenToServer } from '../api/api';
 
 const SignInScreen = ({ navigation }) => {
    const { control, handleSubmit, errors } = useForm();
    const [ loginError, setLoginError ] = useState('');
 
    const { dispatch } = useContext(GlobalContext);
-   const onSubmit = data => {
-      let idToken;
-      firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+   const onSubmit = async data => {
+      try {
+         const userCredential = await firebase.auth().signInWithEmailAndPassword(data.email, data.password);
+         const user = userCredential.user;
+
+         try {
+            setLoginError('');
+            const idToken = await user.getIdToken();
+            const response = await sendIdTokenToServer(idToken);
+            // save idToken and restaurantId in async storage
+            const idTokenPair = ['userIdToken', idToken];
+            const restaurantIdPair = ['restaurantId', response.restaurantId];
+            try {
+               await AsyncStorage.multiSet([idTokenPair, restaurantIdPair]);
+            } catch (e) {
+               console.log(`There was an error saving the idToken and restaurantId to storage ${e}`)
+            }
+            // navigate to next screen if it works by indicating that user is signed in which changes state and triggers rerender
+            // also saving uuid in universal state for later use
+            dispatch({type: SIGN_IN_USER, userSignedIn: true, userUid: user.uid})
+         } catch (err) {
+            console.log(`There was an error getting idToken from backend server ${err}`);
+         }
+
+      } catch (err) {
+         console.log('there was some type of error');
+         let errorCode = err.code;
+         let errorMessage = err.message;
+         console.log(`this is the error code ${errorCode}`);
+         console.log(`this is the error message ${errorMessage}`)
+         setLoginError(errorMessage);
+         switch (err.code) {
+            case "auth/invalid-email":
+            case "auth/user-disabled":
+            case "auth/user-not-found":
+               // set the error for all three
+               break;
+            case "auth/wrong-password":
+               // set password error message
+               break;
+         }
+      }
+      /* firebase.auth().signInWithEmailAndPassword(data.email, data.password)
       .then(userCredential => {
          setLoginError('');
          const user = userCredential.user;
          // get id token
          user.getIdToken()
-         .then(token => {
-            idToken = token;
-            // got id token, save this in async storage
-            AsyncStorage.setItem('userIdToken', idToken)
-            .then(token => {
-               // can save token to global context state here
-               console.log(`Successfully saved id token to async storage`);
-            })
-            .catch(err => {
-               console.log(`There was an error saving id token to async storage`);
-            })
+         .then(async idToken => {
+            // idToken = token;
+            // send token to backend to get associated restaurantId in response
+            const response = await sendIdTokenToServer(idToken);
+
+            // save idToken and restaurantId in async storage
+            const idTokenPair = ['userIdToken', idToken];
+            const restaurantIdPair = ['restaurantId', response.restaurantId];
+            try {
+               await AsyncStorage.multiSet([idTokenPair, restaurantIdPair]);
+            } catch (e) {
+               console.log(`There was an error saving the idToken and restaurantId to storage ${e}`)
+            }
          })
          .catch(err => {
             console.log(`There was an error returning the idToken ${err}`)
@@ -59,7 +102,7 @@ const SignInScreen = ({ navigation }) => {
                // set password error message
                break;
          }
-      })
+      })*/
    };
 
    return (

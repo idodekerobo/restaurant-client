@@ -5,7 +5,7 @@ import * as Notifications from 'expo-notifications';
 // can make this an .env variable
 // const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-export const API_URL = 'https://3557b1f1edd5.ngrok.io' + '/api/';
+export const API_URL = 'https://e30ce6657526.ngrok.io' + '/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING
@@ -30,6 +30,17 @@ function catchBlock(err) {
    // throw error
    console.log("There was an error, please see below.");
    console.log(err);
+}
+
+/*
+=================================================================================================================================
+                                                        UTILITY FUNCTIONS
+=================================================================================================================================
+*/
+export const wait = (timeout) => {
+   return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+   });
 }
 
 /*
@@ -75,10 +86,13 @@ export async function checkAuthStatus() {
             console.log(`error.code ${e.code}`)
             console.log(`error msg ${e.message}`);
             console.log(`full error ${e}`)
+            const auth = { }
+            return auth;
             // return;
             // return res.status(401).send({error: 'There was an error checking token on server.'});
          }
       } else {
+         console.log(`no id token present`)
          let result = 'not authorized';
          return result;
       }
@@ -87,18 +101,45 @@ export async function checkAuthStatus() {
    }
 }
 
+export async function sendIdTokenToServer(idToken) {
+   const URL = API_URL + '/signin'
+   try {
+      const response = await fetch(URL, {
+         method: 'POST',
+         headers: {
+            'Content-type': 'application/json',
+         },
+         body: JSON.stringify({
+            idToken
+         }),
+      })
+      const json = response.json();
+      return json;
+   } catch (e) {
+      console.log(`There was an error sending idtoken to database at sign in ${e}`)
+      return;
+   }
+}
+
 export async function signOutUser() {
    // need to remove push token of device from restaurant object on the database
    const URL = API_URL + 'signout'   
-   // TODO - hard coded for now, but will eventually need to look up. based on context? or make api call based on uuid and user object on database?
-   const restaurantId = '5f93275a7327f625dbd0d000';
-   console.log();
-   console.log(`restaurantId ${restaurantId} being sent to this url: ${URL}`);
+   let restaurantId;
+
+   // getting restaurandId from async
+   try {
+      id = await AsyncStorage.getItem('restaurantId');
+      if (id !== null && id !== '') restaurantId = id;
+   } catch (e) {
+      console.log(`error getting restaurant id from async store ${e}`);
+   }
+
    // need to remove device token from async storage
    try {
-      await AsyncStorage.removeItem('userIdToken');
+      // await AsyncStorage.removeItem('userIdToken');
+      await AsyncStorage.multiRemove(['userIdToken', 'restaurantId']);
       console.log();
-      console.log('successfully removed user id token from async storage')
+      console.log('successfully removed user id token and restaurant id from async storage')
       try {
          await firebase.auth().signOut(); // sign out in firebase
          
@@ -180,6 +221,136 @@ export async function updateOrderStatus(orderId, readyStatus, paidStatus, picked
    })
    .then(jsonData => {
       return jsonData
+   })
+   .catch(err => catchBlock(err));
+}
+
+/*
+=================================================================================================================================
+                                                        MENU
+=================================================================================================================================
+*/
+export async function getMenuData() {
+   const URL = API_URL + 'menu/';
+
+   return fetch(URL, {
+      method: 'GET',
+      headers:  {
+         'Content-type': 'application/json'
+      },
+   })
+   .then(resp => {
+      return resp.json();
+   })
+   .then(jsonData => {
+      return jsonData;
+   })
+   .catch(err => catchBlock(err))
+}
+
+/*
+=================================================================================================================================
+                                                        EDIT MENU
+=================================================================================================================================
+*/
+export const saveNewMenuName = async (_id, name) => {
+   const URL = API_URL + 'editMenuName';
+   console.log('running function that is supposed to fetch backend and save this as menu name', name);
+   return fetch(URL, {
+      method: 'POST',
+      headers:  {
+         'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+         _id,
+         name
+      })
+   })
+   .then(resp => {
+      // console.log(resp);
+      return resp;
+      // return resp.json();
+   })
+   // .then(jsonData => {
+   //    return jsonData;
+   // })
+   .catch(err => catchBlock(err))
+}
+
+export const saveNewCategoryName = async (_id, name) => {
+   const URL = API_URL + 'editCategory';
+   // console.log(`saving this category ${_id} w/ this updated name: ${name}`);
+
+   return fetch(URL, {
+      method: 'POST', 
+      headers: {
+         'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+         _id,
+         name
+      })
+   })
+   .then(resp => {
+      return resp;
+   })
+   .catch(err => catchBlock(err));
+}
+
+export const saveNewItemName = async (_id, name) => {
+   const URL = API_URL + 'editItemName';
+
+   return fetch(URL, {
+      method: 'POST', 
+      headers: {
+         'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+         _id,
+         name
+      })
+   })
+   .then(resp => {
+      return resp;
+   })
+   .catch(err => catchBlock(err));
+}
+
+export const sendEditedItemToDB = async (newItemObject) => {
+   const URL = API_URL + 'editItem';
+   console.log(`running api function that will send edit item on the database`);
+
+   return fetch(URL, {
+      method: 'POST', 
+      headers: {
+         'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ // the { } around newItemObject causes the object to be nested into req.body.{ } 
+         newItemObject
+      })
+   })
+   .then(resp => {
+      return resp;
+   })
+   .catch(err => catchBlock(err));
+}
+
+export const addOptionToItem = async (newItemData) => {
+   const URL = API_URL + 'editItemOptions';
+   console.log(`running api function that will send new item option to database`);
+   // console.log(`sending this item to db`);
+   // console.log(newItemData);
+   return fetch(URL, {
+      method: 'POST', 
+      headers: {
+         'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+         newItemObject: newItemData
+      })
+   })
+   .then(resp => {
+      return resp;
    })
    .catch(err => catchBlock(err));
 }

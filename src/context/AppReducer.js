@@ -1,4 +1,4 @@
-import { FETCH_ORDERS, SELECT_ORDER, SIGN_IN_USER, SIGN_OUT_USER, SET_LOADING } from './ActionCreators';
+import { FETCH_ORDERS, SELECT_ORDER, SIGN_IN_USER, SIGN_OUT_USER, SET_LOADING, FETCH_MENUS } from './ActionCreators';
 export const Reducer = (state, action) => {
    switch (action.type) {
       case FETCH_ORDERS: 
@@ -16,6 +16,11 @@ export const Reducer = (state, action) => {
             ...state,
             isLoading: action.isLoading,
          }
+      case FETCH_MENUS: 
+         return {
+            ...state,
+            menus: action.menus,
+         }
       case SIGN_IN_USER: 
          return {
             ...state,
@@ -31,6 +36,7 @@ export const Reducer = (state, action) => {
             selectedOrder: {},
             userSignedIn: false,
             userIdToken: null,
+            userUid: null,
          }
       default: 
          return state;

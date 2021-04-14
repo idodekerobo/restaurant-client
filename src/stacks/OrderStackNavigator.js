@@ -12,7 +12,7 @@ const OrderStackNavigator = () => {
 
    return (
          <Stack.Navigator>
-         <Stack.Screen name="Orders" component={OrderScreen} />
+            <Stack.Screen name="Orders" component={OrderScreen} />
             <Stack.Screen name="Order Details" component={OrderDetailsScreen} 
                options={{cardStyle: backgroundColor}}
             />

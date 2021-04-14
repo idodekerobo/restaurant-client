@@ -5,9 +5,11 @@ const initialState = {
    orders: [{}],
    selectedOrder: {},
    userSignedIn: false,
+   // userSignedIn: true,
    userUid: null,
    userIdToken: null,
    isLoading: true,
+   menus: [{name: ''}],
 }
 
 // create context

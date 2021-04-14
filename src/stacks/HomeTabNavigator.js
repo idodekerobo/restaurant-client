@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // component imports
 import { ProfileScreen } from '../screens/Screen-Exports';
 import OrderStackNavigator from './OrderStackNavigator';
+import MenuStackNavigator from './MenuStackNavigator';
 
 // api imports
 import { API_URL, getAllOrders } from '../api/api';
@@ -47,7 +48,6 @@ const HomeTabNavigator = () => {
       // } else {
       //    alert('must use phsyical device for push notifs');
       // }
-      // const { status, permissions } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
       if (status !== 'granted') {
          alert('You need to allow notifications so you can be alerted when new orders come in!')
@@ -72,7 +72,6 @@ const HomeTabNavigator = () => {
                      clientToken: {
                         value: token,
                      },
-                     // uuid: state.userUid,
                      uuid: user.uid,
                   }),
                });
@@ -92,7 +91,7 @@ const HomeTabNavigator = () => {
 
    useEffect( () => {
       registerForPushNotificationsAsync();
-      grabOrdersFromDb();
+      // grabOrdersFromDb();
    },[ ])
 
    return (
@@ -106,6 +105,7 @@ const HomeTabNavigator = () => {
             }}
          >
             <Tab.Screen name="Orders" component={OrderStackNavigator} />
+            <Tab.Screen name="Menu" component={MenuStackNavigator} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
          </Tab.Navigator>
       </NavigationContainer>

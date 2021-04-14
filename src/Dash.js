@@ -10,14 +10,16 @@ const Dash = () => {
    
    const authFunction = async () => {
       const auth = await checkAuthStatus();
+      if (auth.authStatus === undefined || auth === undefined) {
+         console.log(`checkAuthStatus returned undefined`);
+         dispatch({type: SET_LOADING, isLoading: false});
+      }
+      if (auth.authStatus === 'not authorized') {
+         dispatch({type: SET_LOADING, isLoading: false});
+      }
       if (auth.authStatus === 'authorized') {
          dispatch({type: SET_LOADING, isLoading: false});
          dispatch({type: SIGN_IN_USER, userSignedIn: true});
-      } else if (auth.authStatus === 'not authorized') {
-         dispatch({type: SET_LOADING, isLoading: false});
-      } else if (auth.authStatus === undefined) {
-         console.log(`checkAuthStatus returned undefined`);
-         dispatch({type: SET_LOADING, isLoading: false});
       }
    }
 
