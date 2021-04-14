@@ -6,8 +6,6 @@ import { AntDesign } from '@expo/vector-icons';
 // import { addOptionToItem } from '../api/api';
 
 const AddOptionOverlay = ({ visibility, toggleOverlay, itemData, optionData, setOptionData, onAddNewOptionPress }) => {
-   // const [ optionData, setOptionData ] = useState(initOptionData)
-
    return (
       <Overlay overlayStyle={styles.overlayStyle} 
       toggleOverlay={toggleOverlay}
@@ -24,19 +22,21 @@ const OverlayContent = ({toggleOverlay, optionData, setOptionData, itemData, onA
       // check if property is an object
       if (typeof optionData[property] === 'object' && optionData[property] != null) {
          // find the arr element in availChoices object arr it should be using
-         let object = optionData[property];
+         const copyOfOptionData = _.cloneDeep(optionData);
+         let object = copyOfOptionData[property];
 
          // set the new input of that object
          object[arrIndex][arrObjProp] = text;
 
          // merge it w/ the rest of the optionData 
-         const newOptionObject = {...optionData, [property]: object};
+         const newOptionObject = {...copyOfOptionData, [property]: object};
 
          // update state
          setOptionData(newOptionObject)
          // console.log(newOptionObject);
       } else {
-         const newOptionObject = {...optionData, [property]: text}
+         const copyOfOptionData = _.cloneDeep(optionData);
+         const newOptionObject = {...copyOfOptionData, [property]: text}
          // console.log(newOptionObject)
          setOptionData(newOptionObject)
       }
