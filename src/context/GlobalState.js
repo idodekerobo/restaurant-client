@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { Reducer } from './AppReducer';
 
 const initialState = {
-   orders: [{}],
+   orders: [ ],
    selectedOrder: {},
    userSignedIn: false,
    // userSignedIn: true,

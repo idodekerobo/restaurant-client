@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, RefreshControl } from 'react-native';
 import { Order } from '../components/Component-Exports';
 import { Styles } from '../styles/OrderQueue';
 import { GlobalContext } from '../context/GlobalState';
@@ -29,9 +29,12 @@ export default OrderQueue = (props) => {
 
    // TODO - implement stack or algo to sort from newest to oldest
    let currentOrders;
-   if (!state.orders) {
-      currentOrders = null;
+   if (!state.orders || state.orders.length === 0) {
+      currentOrders = <View style={{flex: 1, width: '100%', height: 100, justifyContent: 'center', alignItems: 'center'}}>
+         <Text style={{fontSize: 28}}>No orders yet!</Text>
+      </View>
    } else {
+      console.log(state.orders);
       currentOrders = state.orders.slice().reverse().map((obj, i) => (
          <TouchableOpacity key={(obj._id) ? obj._id : i} onPress={onPress.bind(this, obj._id)} style={Styles.orderContainer}>
             <Order data={obj} />
@@ -44,7 +47,6 @@ export default OrderQueue = (props) => {
             contentContainerStyle={Styles.scrollViewContent}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
          >
-            {currentOrders}
             {currentOrders}
          </ScrollView>
    );

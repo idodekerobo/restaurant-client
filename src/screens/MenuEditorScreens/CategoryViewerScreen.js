@@ -98,6 +98,7 @@ const CategoryViewerScreen = ({ route, navigation }) => {
          <View style={styles.itemWrapperStyle}>
             {categoryItems}
          </View>
+         <View style={{height: 100}}></View>
       </ScrollView>
    )   
 }
@@ -106,7 +107,7 @@ export default CategoryViewerScreen;
 
 const styles = StyleSheet.create({
    container: {
-      flex: 1,
+      // flex: 1,
       justifyContent: 'flex-start',
       alignItems: 'center',
       marginTop: 30,
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
       fontSize: 30,
    },
    itemWrapperStyle: {
-      flex: 1,
+      // flex: 1,
       width: '90%',
       alignItems: 'center',
    },

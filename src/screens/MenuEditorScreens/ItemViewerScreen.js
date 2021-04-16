@@ -223,55 +223,64 @@ const ItemViewerScreen = ({ route, navigation }) => {
       }
    });
 
-   // const options = item.options.map((option, i) => {
-   const options = versionToShow.map((option, i) => {
-
-      const choices = option.availChoices.map((choice, i) => {
+   let options;
+   if ( !editMode && (!inputs.options) ) {
+      // || !(Object.keys(inputs.options[0]).length > 0)
+      // || inputs.options[0].name
+      options = <View style={{marginBottom: 10}}><Text style={styles.subheaderFontStyle}>No Options</Text></View>
+   } else {
+      // const options = item.options.map((option, i) => {
+      options = versionToShow.map((option, i) => {
+   
+         const choices = option.availChoices.map((choice, i) => {
+            return (
+               <View key={i} style={styles.optionChoicesContainer}>
+                  
+                  {(!editMode) ?
+                     <Text style={{fontSize: 18, textAlign: 'right'}}>{choice.name}: ${(choice.price) ? (choice.price*1).toFixed(2) : `0.00`}</Text>
+                     :
+                     <View style={{marginRight:0, padding: 0,flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', width: '80%'}}>
+                        <Input containerStyle={{width: '25%', }} value={`${choice.name}`} placeholder={`${choice.name}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'name', text)} />
+                        <Input containerStyle={{width: '25%', }} value={`$${(choice.price*1).toFixed(2)}`} placeholder={`$${(choice.price*1).toFixed(2)}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'price', text)} />
+                        <TouchableOpacity onPress={() => deleteOptionChoiceFromItemPress(option, choice)}>
+                           <AntDesign name="delete" size={20} color="black" />
+                        </TouchableOpacity>
+                     </View>
+                  }
+               </View>
+            )
+         });
+   
          return (
-            <View key={i} style={styles.optionChoicesContainer}>
+            <View key={i} style={styles.optionContainer}>
                
                {(!editMode) ?
-                  <Text style={{fontSize: 18, textAlign: 'right'}}>{choice.name}: ${(choice.price) ? (choice.price*1).toFixed(2) : `0.00`}</Text>
+                  <View>
+                     <Text style={styles.subheaderFontStyle}>{option.name}</Text>
+                     <Text style={styles.subheaderFontStyle}>Max Amount to Select: {option.chooseNum}</Text>
+                  </View>
                   :
-                  <View style={{marginRight:0, padding: 0,flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', width: '80%'}}>
-                     <Input containerStyle={{width: '25%', }} value={`${choice.name}`} placeholder={`${choice.name}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'name', text)} />
-                     <Input containerStyle={{width: '25%', }} value={`$${(choice.price*1).toFixed(2)}`} placeholder={`$${(choice.price*1).toFixed(2)}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'price', text)} />
-                     <TouchableOpacity onPress={() => deleteOptionChoiceFromItemPress(option, choice)}>
-                        <AntDesign name="delete" size={20} color="black" />
-                     </TouchableOpacity>
+                  <View style={{width: '20%', flexDirection: 'row', justifyContent: 'space-between'}}>
+                     <View style={{alignSelf: 'center'}}>
+                        <TouchableOpacity onPress={() => deleteOptionFromItemPress(option)}>
+                           <AntDesign name="delete" size={24} color="black" />
+                        </TouchableOpacity>
+                     </View>
+                     <View style={{width: '100%'}}>
+                        <Input containerStyle={{width: '100%', }} value={`${option.name}`} placeholder={`${option.name}`} onChangeText={(text) => onInputOptionChange(option._id, 'name', text)} />
+                        <Input containerStyle={{width: '100%', }} value={`${option.chooseNum}`} placeholder={`Enter max number to choose: ${option.chooseNum}`} onChangeText={(text) => onInputOptionChange(option._id, 'chooseNum', text)} />
+                     </View>
                   </View>
                }
+               <View>
+                  {choices}
+               </View>
             </View>
          )
-      });
+      })
+      
+   }
 
-      return (
-         <View key={i} style={styles.optionContainer}>
-            
-            {(!editMode) ?
-               <View>
-                  <Text style={styles.subheaderFontStyle}>{option.name}</Text>
-                  <Text style={styles.subheaderFontStyle}>Max Amount to Select: {option.chooseNum}</Text>
-               </View>
-               :
-               <View style={{width: '20%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                  <View style={{alignSelf: 'center'}}>
-                     <TouchableOpacity onPress={() => deleteOptionFromItemPress(option)}>
-                        <AntDesign name="delete" size={24} color="black" />
-                     </TouchableOpacity>
-                  </View>
-                  <View style={{width: '100%'}}>
-                     <Input containerStyle={{width: '100%', }} value={`${option.name}`} placeholder={`${option.name}`} onChangeText={(text) => onInputOptionChange(option._id, 'name', text)} />
-                     <Input containerStyle={{width: '100%', }} value={`${option.chooseNum}`} placeholder={`Enter max number to choose: ${option.chooseNum}`} onChangeText={(text) => onInputOptionChange(option._id, 'chooseNum', text)} />
-                  </View>
-               </View>
-            }
-            <View>
-               {choices}
-            </View>
-         </View>
-      )
-   })
 
    useEffect(() => {
       // console.log(item)
@@ -307,6 +316,7 @@ const ItemViewerScreen = ({ route, navigation }) => {
          </View>
 
          {(editMode) ? <Button title="Save" onPress={event => onSaveButtonPress(event)} /> : null }
+         <View style={{height: 100}}></View>
       </ScrollView>
    )   
 }
