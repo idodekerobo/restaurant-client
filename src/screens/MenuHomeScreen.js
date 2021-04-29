@@ -43,7 +43,7 @@ const MenuHomeScreen = (props) => {
                      {(editMode) ? 
                         <Input
                            containerStyle={{width: '100%', height: '100%'}}
-                           inputContainerStyle={{width: 300}} placeholder={el.name}
+                           inputContainerStyle={{width: 200}} placeholder={el.name}
                            value={newMenuName}
                            onChangeText={(value) => setNewMenuName(value)} />
                         :
@@ -52,9 +52,11 @@ const MenuHomeScreen = (props) => {
                   </View>
 
                   <View style={styles.menuActionButtonsContainer}>
-                     { (editMode) ? <Button containerStyle={styles.menuActionButtons} title="Save Name" onPress={() => onSaveMenuNamePress(newMenuName, el._id)} /> : null }
-                     {/* <Button containerStyle={styles.menuActionButtons}  title={`View ${el.name}`} onPress={() => props.navigation.navigate('Menu Editor',{ menuData: el }, 'menu-home-screen')} /> */}
-                     <Button containerStyle={styles.menuActionButtons}  title={`View ${el.name}`} onPress={() => props.navigation.navigate({name: 'Menu Editor', params: { menuData: el }, key: 'menu-home-screen'})} />
+                     { (editMode) ? 
+                        <Button containerStyle={styles.menuActionButtons} title="Save Name" onPress={() => onSaveMenuNamePress(newMenuName, el._id)} />
+                        : 
+                        <Button containerStyle={styles.menuActionButtons}  title={`View ${el.name}`} onPress={() => props.navigation.navigate({name: 'Menu Editor', params: { menuData: el }, key: 'menu-home-screen'})} />
+                     }
                   </View>
                </View>   
    
@@ -75,9 +77,6 @@ const MenuHomeScreen = (props) => {
       setEditMode(false);
       onRefresh();
    }
-
-   // const renameButton = <Button title="Rename Menu's" containerStyle={styles.editButtonContainer} buttonStyle={styles.editButton} titleStyle={styles.editButtonTitle} onPress={event => onEditButtonPress(event)} />
-   // const cancelButton = <Button title="Cancel Edit" containerStyle={styles.editButtonContainer} buttonStyle={styles.editButton} titleStyle={styles.editButtonTitle} onPress={event => onCancelButtonPress(event)} />
 
    useEffect(() => {
       getMenu();
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
       marginTop: 25,
    },
    pageHeaderText: {
-      fontSize: ( (windowWidth>500) ? 72 : 24),
+      fontSize: ( (windowWidth>500) ? 50 : 24),
    },
    editButtonContainer: {
       // height: 100,
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
       // height: '100%',
    },
    editButtonTitle: {
-      fontSize: ( (windowWidth>500) ? 60 : 20),
+      fontSize: ( (windowWidth>500) ? 40 : 20),
    },
    menuContainer: {
       flex: 1,

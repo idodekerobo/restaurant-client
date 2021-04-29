@@ -8,11 +8,9 @@ const MenuStackNavigator = () => {
    return (
       <Stack.Navigator>
          <Stack.Screen name="Menu" component={MenuHomeScreen} />
-         <Stack.Screen name="Menu Editor" component={MenuEditorScreen} />
-
-         <Stack.Screen name="Category Viewer" component={CategoryViewerScreen} />
-
-         <Stack.Screen name="Item Viewer" component={ItemViewerScreen} />
+         <Stack.Screen name="Menu Editor" component={MenuEditorScreen} options={({ route }) => ({ title: `Categories for ${route.params.menuData.name}`})} />
+         <Stack.Screen name="Category Viewer" component={CategoryViewerScreen} options={ ({route}) => ({ title: `${route.params.categoryData.name}`}) } />
+         <Stack.Screen name="Item Viewer" component={ItemViewerScreen} options={ ({route}) => ({ title: `${route.params.itemData.name}`}) } />
       </Stack.Navigator>
    )
 }

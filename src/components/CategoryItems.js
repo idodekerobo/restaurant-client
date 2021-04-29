@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input } from 'react-native-elements';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import { saveNewItemName } from '../api/api'
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const CategoryItems = ({ editMode, setEditMode, viewMorePress, item, onRefresh }) => {
    const [ newName, setNewName ] = useState('');
@@ -20,7 +23,7 @@ const CategoryItems = ({ editMode, setEditMode, viewMorePress, item, onRefresh }
 
             <View style={styles.itemHeader}>
                { (!editMode) ? 
-                  <Text style={{fontWeight: '500', fontSize: 32}}>{item.name}</Text>
+                  <Text style={styles.itemNameFontStyle}>{item.name}</Text>
                   :
                   <Input placeholder={item.name}
                      containerStyle={styles.containerStyle}
@@ -38,16 +41,14 @@ const CategoryItems = ({ editMode, setEditMode, viewMorePress, item, onRefresh }
                         onPress={() => onSaveItemNamePress(item._id)}
                      />
                   :
-                  null
-               }
-               <Button
-                  title={`View ${item.name}`}
+                  <Button
+                  // title={`View ${item.name}`}
+                  title={`View`}
                   containerStyle={styles.itemActionButtons}
                   onPress={viewMorePress} />
+               }
             </View>
-
          </View>
-         
       </View>
    )
 }
@@ -61,11 +62,14 @@ const styles = StyleSheet.create({
    },
    itemContainer: {
       flex: 1,
-      margin: 20,
+      margin: 5,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      // borderColor: 'black',
-      // borderWidth: 3,      
+      alignItems: 'center',
+   },
+   itemNameFontStyle: {
+      fontWeight: '500',
+      fontSize: 18
    },
    itemHeaders: {
 
@@ -75,7 +79,8 @@ const styles = StyleSheet.create({
       height: '100%',
    },
    inputContainerStyle: {
-      width: 300,
+      // width: 300,
+      width: (windowWidth < 450) ? 150 : 300,
    },
    inputStyle: {
 

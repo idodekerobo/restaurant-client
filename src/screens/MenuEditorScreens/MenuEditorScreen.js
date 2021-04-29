@@ -70,9 +70,10 @@ const MenuEditorScreen = ({ route, navigation }) => {
    // }, [ menu ])
 
    return (
-      <ScrollView style={{flex: 1}} contentContainerStyle={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      // <View style={{flex: 1, height: '100%'}}>
+      <ScrollView style={{flex: 1, width: '95%', marginTop: 30}}  contentContainerStyle={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
          <View style={styles.pageHeaderContainer}>
-            <Text style={styles.pageHeaderText}>Categories for {menu.name}</Text>
+            {/* <Text style={styles.pageHeaderText}>Categories for {menu.name}</Text> */}
             { (editMode) ? 
                <Button title="Cancel"
                   containerStyle={styles.editButtonContainer}
@@ -91,7 +92,9 @@ const MenuEditorScreen = ({ route, navigation }) => {
          <View style={styles.categoryWrapperStyle}>
             {categories}
          </View>
+         <View style={{height: 100}}></View>
       </ScrollView>
+      // </View>
    )   
 }
 
@@ -99,14 +102,15 @@ export default MenuEditorScreen;
 
 const styles = StyleSheet.create({
    container: {
-      flex: 1,
-      justifyContent: 'flex-start',
+      // flex: 1,
+      // justifyContent: 'flex-start',
       alignItems: 'center',
-      marginTop: 30,
+      // marginTop: 30,
    },
    pageHeaderContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       width: '90%',
       marginBottom: 10,
    },
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
    editButton: {
    },
    editButtonTitle: {
-      fontSize: 30,
+      fontSize: 22,
    },
    categoryWrapperStyle: {
       flex: 1,

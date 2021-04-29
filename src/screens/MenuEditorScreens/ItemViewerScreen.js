@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 import _ from "lodash";
 import { Button, Input } from 'react-native-elements';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, RefreshControl, Dimensions } from 'react-native';
 import { ItemProperties, ItemOptions, AddOptionOverlay } from '../../components/Component-Exports';
 import { AntDesign } from '@expo/vector-icons';
 import { GlobalContext } from '../../context/GlobalState';
 import { FETCH_MENUS } from '../../context/ActionCreators';
 import { wait, getMenuData, sendEditedItemToDB } from '../../api/api';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const initOptionData = {
    name: '',
@@ -237,10 +240,10 @@ const ItemViewerScreen = ({ route, navigation }) => {
                <View key={i} style={styles.optionChoicesContainer}>
                   
                   {(!editMode) ?
-                     <Text style={{fontSize: 18, textAlign: 'right'}}>{choice.name}: ${(choice.price) ? (choice.price*1).toFixed(2) : `0.00`}</Text>
+                     <Text style={{fontSize: 18, textAlign: 'right'}}>{choice.name}{(choice.price) ? `: $${(choice.price*1).toFixed(2)}` : null}</Text>
                      :
-                     <View style={{marginRight:0, padding: 0,flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', width: '80%'}}>
-                        <Input containerStyle={{width: '25%', }} value={`${choice.name}`} placeholder={`${choice.name}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'name', text)} />
+                     <View style={styles.optionChoicesInputWrapperContainer}>
+                        <Input containerStyle={{width: '50%', }} value={`${choice.name}`} placeholder={`${choice.name}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'name', text)} />
                         <Input containerStyle={{width: '25%', }} value={`$${(choice.price*1).toFixed(2)}`} placeholder={`$${(choice.price*1).toFixed(2)}`} onChangeText={(text) => onInputOptionChoiceChange(option._id, choice._id, 'price', text)} />
                         <TouchableOpacity onPress={() => deleteOptionChoiceFromItemPress(option, choice)}>
                            <AntDesign name="delete" size={20} color="black" />
@@ -255,7 +258,7 @@ const ItemViewerScreen = ({ route, navigation }) => {
             <View key={i} style={styles.optionContainer}>
                
                {(!editMode) ?
-                  <View>
+                  <View style={{width:400}}>
                      <Text style={styles.subheaderFontStyle}>{option.name}</Text>
                      <Text style={styles.subheaderFontStyle}>Max Amount to Select: {option.chooseNum}</Text>
                   </View>
@@ -266,7 +269,7 @@ const ItemViewerScreen = ({ route, navigation }) => {
                            <AntDesign name="delete" size={24} color="black" />
                         </TouchableOpacity>
                      </View>
-                     <View style={{width: '100%'}}>
+                     <View style={{width: 150}}>
                         <Input containerStyle={{width: '100%', }} value={`${option.name}`} placeholder={`${option.name}`} onChangeText={(text) => onInputOptionChange(option._id, 'name', text)} />
                         <Input containerStyle={{width: '100%', }} value={`${option.chooseNum}`} placeholder={`Enter max number to choose: ${option.chooseNum}`} onChangeText={(text) => onInputOptionChange(option._id, 'chooseNum', text)} />
                      </View>
@@ -328,8 +331,8 @@ const styles = StyleSheet.create({
       // flex: 1,
       marginTop: 20,
       marginBottom: 200,
-      marginLeft: 50,
-      marginRight: 50,
+      marginLeft: (windowWidth < 450) ? 10 : 50,
+      marginRight: (windowWidth < 450) ? 10 : 50,
       justifyContent: 'flex-start',
       alignContent: 'flex-end',
    },
@@ -344,23 +347,38 @@ const styles = StyleSheet.create({
       borderColor: 'black',
    },
    optionContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      // flexDirection: 'row',
+      flexDirection: (windowWidth < 450) ? 'column' : 'row',
+      justifyContent: (windowWidth < 450) ? 'space-around' : 'space-between',
+      alignItems: (windowWidth < 450) ? 'flex-start' : 'flex-start',
       flexShrink: 1,
-      marginBottom: 15,
+      marginTop: 10,
+      marginBottom: 40,
+      marginLeft: 5,
+      borderTopWidth: 0.5,
+      borderBottomWidth: 0.5,
    },
    optionChoicesContainer: {
-      marginBottom: 1,
+      marginLeft: (windowWidth < 450) ? 10 : 0,
+      marginBottom: 2,
       flexDirection: 'row',
-      justifyContent: 'flex-end',
-      // width: '50%',
+      // justifyContent: (windowWidth < 450) ? 'flex-start' : 'flex-end',
+      justifyContent: 'flex-start',
+      // width: '100%',
+   },
+   optionChoicesInputWrapperContainer: {
+      width: (windowWidth < 450) ? 350 : 450,
+      marginRight:0,
+      padding: 0,
+      flexDirection: 'row',
+      justifyContent: (windowWidth < 450) ? 'flex-start' : 'flex-end',
+      alignItems: 'center',
    },
    labelFontStyle: {
       fontSize: 18,
       textTransform: 'capitalize',
    },
    subheaderFontStyle: {
-      marginLeft: 5,
       fontSize: 22,
       textTransform: 'capitalize'
    },

@@ -76,9 +76,9 @@ const CategoryViewerScreen = ({ route, navigation }) => {
    }, [ ])
 
    return (
-      <ScrollView style={{flex: 1}} contentContainerStyle={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
+      <ScrollView style={{flex: 1, width: '95%', marginTop: 30,}} contentContainerStyle={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
          <View style={styles.pageHeaderContainer}>
-            <Text style={styles.pageHeaderText}>{category.name} Category</Text>
+            {/* <Text style={styles.pageHeaderText}>{category.name} Category</Text> */}
             { (editMode) ? 
                <Button
                   title="Cancel"
@@ -108,13 +108,14 @@ export default CategoryViewerScreen;
 const styles = StyleSheet.create({
    container: {
       // flex: 1,
-      justifyContent: 'flex-start',
+      // justifyContent: 'flex-start',
       alignItems: 'center',
-      marginTop: 30,
+      // marginTop: 30,
    },
    pageHeaderContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       width: '90%',
       marginBottom: 10,
    },

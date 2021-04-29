@@ -19,7 +19,6 @@ import { GlobalContext } from '../context/GlobalState';
 import { FETCH_ORDERS } from '../context/ActionCreators';
 
 // push notif imports
-import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants'
 import { State } from 'react-native-gesture-handler';
@@ -42,18 +41,28 @@ const HomeTabNavigator = () => {
       });
    }
 
+   // TODO - double check that notifications still work after migrating to new expo SDK
    // this should be done at sign in since it'll be associated w/ the restaurant that signed in
    const registerForPushNotificationsAsync = async () => {
       // if (Constants.isDevice) {
       // } else {
       //    alert('must use phsyical device for push notifs');
       // }
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      if (status !== 'granted') {
+      
+      const notificationRequest = await Notifications.requestPermissionsAsync({
+         ios: {
+            allowAlert: true,
+            allowBadge: true,
+            allowSound: true,
+            allowAnnouncements: true,
+         },
+      });
+      if (notificationRequest.status !== 'granted') {
          alert('You need to allow notifications so you can be alerted when new orders come in!')
          return;
       } else {
       }
+
       // TODO - make this check if the same token is already present in async storage. if yes, short circuit the function
       const token = await Notifications.getExpoPushTokenAsync();
 

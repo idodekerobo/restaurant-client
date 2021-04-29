@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input } from 'react-native-elements';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import { saveNewCategoryName } from '../api/api'
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const MenuCategories = ({ editMode, setEditMode, viewMorePress, category, onRefresh }) => {
    const [ newCategoryName, setNewCategoryName ] = useState('');
@@ -20,10 +23,10 @@ const MenuCategories = ({ editMode, setEditMode, viewMorePress, category, onRefr
 
             <View style={styles.categoryHeaders}>
                { (!editMode) ? 
-                  <Text style={{fontWeight: '500', fontSize: 32}}>{category.name}</Text>
+                  <Text style={styles.categoryNameFontStyle}>{category.name}</Text>
                   :
                   <Input placeholder={category.name}
-                     containerStyle={styles.containerStyle}
+                     containerStyle={styles.inputComponentContainerStyle}
                      inputContainerStyle={styles.inputContainerStyle}
                      inputStyle={styles.inputStyle}
                      value={newCategoryName} onChangeText={(text) => setNewCategoryName(text)} />
@@ -38,12 +41,13 @@ const MenuCategories = ({ editMode, setEditMode, viewMorePress, category, onRefr
                         onPress={() => onSaveCategoryNamePress(category._id)}
                      />
                   :
-                  null
-               }
-               <Button
-                  title={`View ${category.name} Category`}
+                  <Button
+                  // title={`View ${category.name}`}
+                  title={`View`}
                   containerStyle={styles.categoryActionButtons}
                   onPress={viewMorePress} />
+               }
+               
             </View>
          </View>
       </View>
@@ -56,25 +60,31 @@ const styles = StyleSheet.create({
       flex: 1,
       width: '100%',
    },
-   containerStyle: {
+   categoryContainer: {
+      flex: 1,
+      margin: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+   },
+   categoryNameFontStyle: {
+      fontWeight: '500',
+      fontSize: 18
+   },
+   inputComponentContainerStyle: {
       width: '100%',
       height: '100%',
    },
    inputContainerStyle: {
-      width: 300,
+      // width: 300,
+      width: (windowWidth < 450) ? 150 : 300,
    },
    inputStyle: {
 
    },
-   categoryContainer: {
-      flex: 1,
-      margin: 20,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      // borderColor: 'black',
-      // borderWidth: 3,
+   categoryHeaders: {
+
    },
-   categoryHeaders: {},
    // categoryName: {
    //    fontWeight: '500',
    //    fontSize: 24,
