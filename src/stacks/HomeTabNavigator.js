@@ -106,7 +106,7 @@ const HomeTabNavigator = () => {
          >
             <Tab.Screen name="Orders" component={OrderStackNavigator} />
             <Tab.Screen name="Menu" component={MenuStackNavigator} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Account" component={ProfileScreen} />
          </Tab.Navigator>
       </NavigationContainer>
    );

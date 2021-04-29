@@ -1,9 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { ScrollView, StyleSheet, SafeAreaView, View, Text, RefreshControl, Dimensions } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import { ScrollView, StyleSheet, SafeAreaView, View, Text, RefreshControl } from 'react-native';
 import { GlobalContext } from '../context/GlobalState'
 import { FETCH_MENUS } from '../context/ActionCreators';
 import { wait, getMenuData, saveNewMenuName } from '../api/api';
+import { Feather } from '@expo/vector-icons'; // icon
+import { Tooltip, } from 'react-native-elements';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 // TODO - (??????) dont pass in data as route params (they do not rerender) instead pass in as props
 const MenuHomeScreen = (props) => {
@@ -45,7 +50,7 @@ const MenuHomeScreen = (props) => {
                         <Text style={styles.menuName}>{el.name}</Text>
                      }
                   </View>
-                  
+
                   <View style={styles.menuActionButtonsContainer}>
                      { (editMode) ? <Button containerStyle={styles.menuActionButtons} title="Save Name" onPress={() => onSaveMenuNamePress(newMenuName, el._id)} /> : null }
                      {/* <Button containerStyle={styles.menuActionButtons}  title={`View ${el.name}`} onPress={() => props.navigation.navigate('Menu Editor',{ menuData: el }, 'menu-home-screen')} /> */}
@@ -71,17 +76,26 @@ const MenuHomeScreen = (props) => {
       onRefresh();
    }
 
+   // const renameButton = <Button title="Rename Menu's" containerStyle={styles.editButtonContainer} buttonStyle={styles.editButton} titleStyle={styles.editButtonTitle} onPress={event => onEditButtonPress(event)} />
+   // const cancelButton = <Button title="Cancel Edit" containerStyle={styles.editButtonContainer} buttonStyle={styles.editButton} titleStyle={styles.editButtonTitle} onPress={event => onCancelButtonPress(event)} />
+
    useEffect(() => {
       getMenu();
+      // console.log(windowWidth, windowHeight);
    }, [ ])
 
    return (
       <SafeAreaView style={styles.container}>
          <ScrollView  style={styles.scrollViewContainer} contentContainerStyle={styles.scrollViewContent} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10,}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between',alignItems: 'center', marginBottom: 15,}}>
                <Text style={styles.pageHeaderText}>Menu's</Text>
+
+               {/* <Tooltip popover={renameButton}>
+                  <Feather name="more-vertical" size={24} color="black" />
+               </Tooltip> */}
+
                {(!editMode) ?
-                  <Button title="Rename Menu's"
+                  <Button title="Rename"
                      containerStyle={styles.editButtonContainer}
                      buttonStyle={styles.editButton}
                      titleStyle={styles.editButtonTitle}
@@ -109,7 +123,7 @@ const styles = StyleSheet.create({
       // borderColor: 'yellow',
       // borderWidth: 3,
       flex: 1,
-      width: '95%',
+      width: '88%',
    },
    scrollViewContent: {
       flex: 1,
@@ -120,23 +134,25 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: 'center',
-      marginTop: 30,
+      marginTop: 25,
    },
    pageHeaderText: {
-      fontSize: 42,
+      fontSize: ( (windowWidth>500) ? 72 : 24),
    },
    editButtonContainer: {
-      
+      // height: 100,
+      // width: 300,
    },
    editButton: {
       // height: '100%',
    },
    editButtonTitle: {
-      fontSize: 30,
+      fontSize: ( (windowWidth>500) ? 60 : 20),
    },
    menuContainer: {
       flex: 1,
-      margin: 20,
+      
+      // margin: ( (windowWidth>500) ? 72 : 24),
       flexDirection: 'row',
       justifyContent: 'space-between',
       // borderColor: 'black',

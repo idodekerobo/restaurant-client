@@ -5,7 +5,7 @@ import * as Notifications from 'expo-notifications';
 // can make this an .env variable
 // const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-export const API_URL = 'https://e30ce6657526.ngrok.io' + '/api/';
+export const API_URL = 'https://d37212ae841f.ngrok.io' + '/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING
