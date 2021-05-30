@@ -16,9 +16,8 @@ export default ProfileScreen = () => {
    return (
       <View style={styles.container}>
          <View style={styles.textStyle}>
-            <Text>PROFILE SCREEN</Text>
          </View>
-         <Button containerStyle={styles.signOutButton} onPress={signOut} title="SIGN OUT USER"/>
+         <Button containerStyle={styles.signOutButton} onPress={signOut} title="Sign Out"/>
       </View>
    );
 }

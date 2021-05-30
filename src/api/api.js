@@ -2,10 +2,13 @@ import firebase, { auth } from '../services/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
-// can make this an .env variable
+// Local Host
 // const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-export const API_URL = 'https://d37212ae841f.ngrok.io' + '/api/';
+// export const API_URL = 'https://8fb9fc6c5ab8.ngrok.io' + '/api/';
+
+// can make this an .env variable
+export const API_URL = 'https://www.rhemi.co/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING

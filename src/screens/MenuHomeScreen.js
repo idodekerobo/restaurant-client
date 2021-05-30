@@ -14,12 +14,15 @@ const windowHeight = Dimensions.get('window').height;
 const MenuHomeScreen = (props) => {
    const { state, dispatch } = useContext(GlobalContext);
 
+   const [ menuLoading, setMenuLoading ] = useState(true);
+
    const [ editMode, setEditMode ] = useState(false);
    const [ newMenuName, setNewMenuName ] = useState('')
    const [ refreshing, setRefreshing ] = useState(false);
 
    const getMenu = async () => {
       const menus = await getMenuData(); // returns an array of menu's
+      setMenuLoading(false);
       dispatch({type: FETCH_MENUS, menus})
    }
 
@@ -52,7 +55,9 @@ const MenuHomeScreen = (props) => {
                   </View>
 
                   <View style={styles.menuActionButtonsContainer}>
-                     { (editMode) ? 
+                     { (menuLoading) ?
+                           null
+                        : (editMode) ? 
                         <Button containerStyle={styles.menuActionButtons} title="Save Name" onPress={() => onSaveMenuNamePress(newMenuName, el._id)} />
                         : 
                         <Button containerStyle={styles.menuActionButtons}  title={`View ${el.name}`} onPress={() => props.navigation.navigate({name: 'Menu Editor', params: { menuData: el }, key: 'menu-home-screen'})} />
