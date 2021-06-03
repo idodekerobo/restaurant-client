@@ -8,6 +8,7 @@ import * as Notifications from 'expo-notifications';
 // export const API_URL = 'https://8fb9fc6c5ab8.ngrok.io' + '/api/';
 
 // can make this an .env variable
+export const BASE_API_URL = 'https://www.rhemi.co/' 
 export const API_URL = 'https://www.rhemi.co/api/';
 /*
 =================================================================================================================================
