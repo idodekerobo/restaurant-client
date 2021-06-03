@@ -61,7 +61,7 @@ export default OrderQueue = (props) => {
          // unbind all event handlers used in this component
          socket.off('order-change');
        };
-   },)
+   }, [ ])
    return (
          <ScrollView
             style={Styles.wrapperContainer}
