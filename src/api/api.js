@@ -3,11 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
 // Local Host
-// const API_URL = 'http://localhost:5000/api/';
+// export const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
 // export const API_URL = 'https://8fb9fc6c5ab8.ngrok.io' + '/api/';
 
 // can make this an .env variable
+// export const BASE_API_URL = 'http://localhost:5000/' 
 export const BASE_API_URL = 'https://www.rhemi.co/' 
 export const API_URL = 'https://www.rhemi.co/api/';
 /*
@@ -206,7 +207,7 @@ export async function getAllOrders(idToken) {
 }
 
 // update specific order status
-export async function updateOrderStatus(orderId, readyStatus, paidStatus, pickedUpStatus) {
+export async function updateOrderStatus(orderId, enteredStatus, readyStatus, paidStatus, pickedUpStatus) {
    const URL = API_URL + 'order/' + orderId;
    return fetch(URL, {
       method: 'PUT',
@@ -214,6 +215,7 @@ export async function updateOrderStatus(orderId, readyStatus, paidStatus, picked
          'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+         entered: enteredStatus,
          ready: readyStatus,
          paid: paidStatus,
          pickedUp: pickedUpStatus,

@@ -5,7 +5,7 @@ import { Styles } from '../styles/Order';
 
 export default Order = (props) => {
    // TODO - need to check if everything is undefined first before rendering
-   const { firstName, lastName, orderItems, subtotal, tax, totalCost, orderPlacedDate, paid, ready, pickedUp } = props.data
+   const { firstName, lastName, orderItems, subtotal, tax, totalCost, orderPlacedDate, paid, ready, entered, pickedUp } = props.data
 
    // TODO - how to remove the seconds from the time
    let orderDate;
@@ -45,12 +45,14 @@ export default Order = (props) => {
 
    // TODO - make sure this logic holds up
    let statusFlag;
-   if ((ready == true) && (pickedUp == true)) {
-      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Ready" status="primary" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} /><Badge value="Picked Up" status="success" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
-   } else if ((ready == true) && (pickedUp == false)){
-      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Ready" status="primary" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} /><Badge value="Not Picked Up" status="warning" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
+   if ((ready == true) && (pickedUp == true) && (entered == true)) {
+      statusFlag = <View style={Styles.statusFlagContainer}>{/*<Badge value="Ready" status="success" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} />*/}<Badge value="Picked Up" status="success" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
+   } else if ((ready == true) && (pickedUp == false) && (entered == true)){
+      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Ready" status="success" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} />{/*<Badge value="Not Picked Up" status="warning" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/>*/}</View>
+   } else if ((ready == false) && (pickedUp == false) && (entered == true)){
+      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Entered" status="success" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} />{/*<Badge value="Entered" status="warning" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/>*/}</View>
    } else {
-      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Not Ready" status="warning" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/><Badge value="Not Picked Up" status="warning"badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/></View>
+      statusFlag = <View style={Styles.statusFlagContainer}><Badge value="Not Entered" status="error" badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/>{/* <Badge value="Not Picked Up" status="warning"badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/> */}</View>
    }
 
    // TODO - make the dollar values go out to two decimals (have to check for undefined first or will crash the app)
@@ -67,10 +69,7 @@ export default Order = (props) => {
          <Card.Divider style={Styles.cardDivider}/>
          <View>
             <Text style={[Styles.orderTimeText, Styles.fontColor]}>{orderDate}</Text>
-            <View style={Styles.badgeContainer}>
-               <Badge status={badgeStatus} value={payStatus} badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText}/>
-               {statusFlag}
-            </View>
+            
             <View style={Styles.orderItemDetailContainer}>
                <Text style={{...Styles.fontColor, fontSize: 18}}>Items: {order}</Text>
                
@@ -79,7 +78,10 @@ export default Order = (props) => {
                      <Text style={[Styles.fontColor, Styles.orderPricing]}>Subtotal: ${subtotal} </Text>
                      <Text style={[Styles.fontColor, Styles.orderPricing]}>Tax: ${tax} </Text>
                   </View>
-                  
+                  <View style={Styles.badgeContainer}>
+                     <Badge status={badgeStatus} value={payStatus} badgeStyle={Styles.badgeBackgroundView} textStyle={Styles.badgeText} />
+                     {statusFlag}
+                  </View>
                </View>
             </View>
          </View>

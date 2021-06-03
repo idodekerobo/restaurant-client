@@ -10,7 +10,8 @@ import { FETCH_ORDERS, SELECT_ORDER } from '../context/ActionCreators';
 const orderStatusFunc = (order) => {
    if (order.pickedUp && order.paid) return 2;
    if (order.ready) return 1;
-   if (!order.ready) return 0;
+   if (order.entered) return 0;
+   if (!order.entered) return null;
 }
 const wait = (timeout) => {
    return new Promise(resolve => {
@@ -38,23 +39,24 @@ const OrderDetailsScreen = (props) => {
       updateOrder(updatedOrder);
       // console.log(order.orderItems);
       
-      wait(2000).then( () => setRefreshing(false));
+      wait(3000).then( () => setRefreshing(false));
    }
 
    const [orderStatus, updateOrderStatus] = useState(orderStatusFunc(order));
-   const buttons = ['Not Ready', 'Ready', 'Picked Up'];
+   const buttons = ['Entered', 'Ready', 'Picked Up'];
    
    const orderStatusOnPress = async (i) => {
       if (i === orderStatus) return; // if the index press is already selected do nothing
       updateOrderStatus(i);
       const orderId = order._id
       if (i === 0) {
-         dbApi.updateOrderStatus(orderId, false, false, false);
+         // order of params go _id, enteredStatus, readyStatus, paidStatus, pickedUpStatus
+         dbApi.updateOrderStatus(orderId, true, false, false, false);
       };
       if (i === 1) {
-         dbApi.updateOrderStatus(orderId, true, false, false)
+         dbApi.updateOrderStatus(orderId, true, true, false, false)
       } else if (i === 2) {
-         dbApi.updateOrderStatus(orderId, true, true, true)
+         dbApi.updateOrderStatus(orderId, true, true, true, true)
       }
       onRefresh();
    }
@@ -62,7 +64,7 @@ const OrderDetailsScreen = (props) => {
    return (
       <SafeAreaView style={[Styles.container]}>
          <ScrollView style={Styles.scrollViewContainer} contentContainerStyle={Styles.scrollViewContent} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
-            <OrderDetailsHeader firstName={order.firstName} lastName={order.lastName} paid={order.paid} ready={order.ready} pickedUp={order.pickedUp} orderPlacedDate={order.orderPlacedDate} />
+            <OrderDetailsHeader firstName={order.firstName} lastName={order.lastName} paid={order.paid} ready={order.ready} pickedUp={order.pickedUp} entered={order.entered} orderPlacedDate={order.orderPlacedDate} />
             <OrderDetailsContact phone={order.phone} email={order.email} />
             <OrderDetailsItems items={order.orderItems}/>
             <OrderDetailsPricing subtotal={order.subtotal} tax={order.tax} totalCost={order.totalCost} />

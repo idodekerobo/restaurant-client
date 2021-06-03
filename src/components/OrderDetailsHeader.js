@@ -16,11 +16,11 @@ const OrderDetailsHeader = ({firstName, paid, ready, pickedUp, orderPlacedDate})
             <Text style={[Styles.orderName, Styles.fontColor]}>{firstName + "'s Order"}</Text>
             <Text style={[Styles.orderDate, Styles.fontColor]}>{orderTime.toLocaleTimeString() + ", " + orderTime.toLocaleDateString()}</Text>
          </View>
-         <View style={Styles.flagContainer}>
+         {/* <View style={Styles.flagContainer}>
             <Text style={[Styles.paidFlag, Styles.fontColor]}>{(paid) ? "Paid" : "Not Paid"}</Text>
             <Text style={[Styles.completedFlag, Styles.fontColor]}>{(ready) ? "Ready" : "Not Ready"}</Text>
             <Text style={[Styles.completedFlag, Styles.fontColor]}>{(pickedUp) ? "Picked Up" : "Not Picked Up"}</Text>
-         </View>
+         </View> */}
       </View>
    );
 }
