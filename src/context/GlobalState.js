@@ -5,7 +5,6 @@ const initialState = {
    orders: [ ],
    selectedOrder: {},
    userSignedIn: false,
-   // userSignedIn: true,
    userUid: null,
    userIdToken: null,
    isLoading: true,

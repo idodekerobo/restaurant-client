@@ -1,11 +1,19 @@
-import React, { useState, useContext } from 'react';
+// react
+import React, { useState, useContext, useEffect } from 'react';
 import { View, SafeAreaView, ScrollView, RefreshControl, Dimensions } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
-import { GlobalContext } from '../context/GlobalState';
-import { Styles } from '../styles/OrderDetailsScreen';
+
+// custom components
 import { OrderDetailsHeader, OrderDetailsItems, OrderDetailsContact, OrderDetailsPricing } from '../components/Component-Exports';
+
+// context/api's
+import { FETCH_ORDERS } from '../context/ActionCreators';
+import { GlobalContext } from '../context/GlobalState';
+import { useNotificationContext } from '../context/NotificationContext';
 import * as dbApi from '../api/api';
-import { FETCH_ORDERS, SELECT_ORDER } from '../context/ActionCreators';
+
+// styles
+import { Styles } from '../styles/OrderDetailsScreen';
 
 const orderStatusFunc = (order) => {
    if (order.pickedUp && order.paid) return 2;
@@ -17,11 +25,12 @@ const wait = (timeout) => {
    return new Promise(resolve => {
      setTimeout(resolve, timeout);
    });
- }
+}
 
 const OrderDetailsScreen = (props) => {
    const { state, dispatch } = useContext(GlobalContext);
-   // let order = state.selectedOrder;
+   const { stopNotificationsForOrder } = useNotificationContext();
+
    const [order, updateOrder] = useState(state.selectedOrder)
    const [refreshing, setRefreshing] = useState(false);
    
@@ -52,6 +61,7 @@ const OrderDetailsScreen = (props) => {
       if (i === 0) {
          // order of params go _id, enteredStatus, readyStatus, paidStatus, pickedUpStatus
          dbApi.updateOrderStatus(orderId, true, false, false, false);
+         stopNotificationsForOrder(orderId); // stopping notifs when order is started
       };
       if (i === 1) {
          dbApi.updateOrderStatus(orderId, true, true, false, false)
@@ -60,6 +70,10 @@ const OrderDetailsScreen = (props) => {
       }
       onRefresh();
    }
+
+   useEffect(() => {
+
+   }, [ ])
    
    return (
       <SafeAreaView style={[Styles.container]}>

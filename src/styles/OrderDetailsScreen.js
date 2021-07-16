@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+const screenWidth = Dimensions.get('window').width; // 390 for my iphone 12 pro
+const screenHeight = Dimensions.get('window').height; // 844 for my iphone 12 pro
 
 export const Styles = StyleSheet.create({
    container: {
@@ -17,14 +19,15 @@ export const Styles = StyleSheet.create({
    },
    buttonGroupContainer: {
       flex: 2,
-      minHeight: 150,
+      // minHeight: 150,
+      minHeight: (screenHeight < 850) ? 90 : 150,
       marginTop: 20,
       marginLeft: 0,
       marginRight: 0,
       marginBottom: 30,
    },
    buttonGroupTextStyle: {
-      fontSize: 42,
+      fontSize: (screenWidth < 420) ? 24 : 42,
    },
    buttonGroupStyle: {
       // backgroundColor: 'yellow'

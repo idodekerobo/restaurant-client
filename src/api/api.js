@@ -1,16 +1,19 @@
 import firebase, { auth } from '../services/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { OFFLINE_RESTAURANT_ID, OFFLINE_USER_ID_TOKEN_KEY } from './offline_keys'
 import * as Notifications from 'expo-notifications';
 
 // Local Host
+// export const BASE_API_URL = 'http://localhost:5000/' 
 // export const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-// export const API_URL = 'https://8fb9fc6c5ab8.ngrok.io' + '/api/';
+export const BASE_API_URL = 'https://a6ae045138ac.ngrok.io';
+export const API_URL = 'https://a6ae045138ac.ngrok.io' + '/api/';
 
+// PRODUCTION
 // can make this an .env variable
-// export const BASE_API_URL = 'http://localhost:5000/' 
-export const BASE_API_URL = 'https://www.rhemi.co/' 
-export const API_URL = 'https://www.rhemi.co/api/';
+// export const BASE_API_URL = 'https://www.rhemi.co/' 
+// export const API_URL = 'https://www.rhemi.co/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING
@@ -55,7 +58,7 @@ export const wait = (timeout) => {
 */
 export const getUserFromAsyncStorage = async () => {
    try {
-      const token = await AsyncStorage.getItem('userIdToken');
+      const token = await AsyncStorage.getItem(OFFLINE_USER_ID_TOKEN_KEY);
       if (token !== null) {
          return token;
       }
@@ -133,7 +136,7 @@ export async function signOutUser() {
 
    // getting restaurandId from async
    try {
-      id = await AsyncStorage.getItem('restaurantId');
+      id = await AsyncStorage.getItem(OFFLINE_RESTAURANT_ID);
       if (id !== null && id !== '') restaurantId = id;
    } catch (e) {
       console.log(`error getting restaurant id from async store ${e}`);
@@ -141,8 +144,7 @@ export async function signOutUser() {
 
    // need to remove device token from async storage
    try {
-      // await AsyncStorage.removeItem('userIdToken');
-      await AsyncStorage.multiRemove(['userIdToken', 'restaurantId']);
+      await AsyncStorage.multiRemove([OFFLINE_USER_ID_TOKEN_KEY, OFFLINE_RESTAURANT_ID]);
       console.log();
       console.log('successfully removed user id token and restaurant id from async storage')
       try {

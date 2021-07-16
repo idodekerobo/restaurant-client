@@ -7,6 +7,7 @@ import { GlobalContext } from '../context/GlobalState';
 import { SIGN_IN_USER } from '../context/ActionCreators';
 import firebase from '../services/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { OFFLINE_RESTAURANT_ID, OFFLINE_USER_ID_TOKEN_KEY } from '../api/offline_keys'
 import { sendIdTokenToServer } from '../api/api';
 
 const SignInScreen = ({ navigation }) => {
@@ -24,8 +25,8 @@ const SignInScreen = ({ navigation }) => {
             const idToken = await user.getIdToken();
             const response = await sendIdTokenToServer(idToken);
             // save idToken and restaurantId in async storage
-            const idTokenPair = ['userIdToken', idToken];
-            const restaurantIdPair = ['restaurantId', response.restaurantId];
+            const idTokenPair = [OFFLINE_USER_ID_TOKEN_KEY, idToken];
+            const restaurantIdPair = [OFFLINE_RESTAURANT_ID, response.restaurantId];
             try {
                await AsyncStorage.multiSet([idTokenPair, restaurantIdPair]);
             } catch (e) {

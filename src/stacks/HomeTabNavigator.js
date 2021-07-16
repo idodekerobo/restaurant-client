@@ -9,26 +9,20 @@ import OrderStackNavigator from './OrderStackNavigator';
 import MenuStackNavigator from './MenuStackNavigator';
 
 // api imports
-import { API_URL, getAllOrders } from '../api/api';
+import { getAllOrders } from '../api/api';
 
 // Firebase import
 import firebase from '../services/firebase';
 
-// global state imports
+// context imports
 import { GlobalContext } from '../context/GlobalState';
 import { FETCH_ORDERS } from '../context/ActionCreators';
-
-// push notif imports
-import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants'
-import { State } from 'react-native-gesture-handler';
-
-const PUSH_TOKEN_ENDPOINT = API_URL + 'saveToken/'
+import { Provider as NotificationProvider } from '../context/NotificationContext';
 
 const Tab = createBottomTabNavigator();
 
 const HomeTabNavigator = () => {
-   const { dispatch } = useContext(GlobalContext);
+   const { state, dispatch } = useContext(GlobalContext);
 
    const grabOrdersFromDb = async () => {
       firebase.auth().onAuthStateChanged(async user => {
@@ -41,83 +35,27 @@ const HomeTabNavigator = () => {
       });
    }
 
-   // TODO - double check that notifications still work after migrating to new expo SDK
-   // this should be done at sign in since it'll be associated w/ the restaurant that signed in
-   const registerForPushNotificationsAsync = async () => {
-      // if (Constants.isDevice) {
-      // } else {
-      //    alert('must use phsyical device for push notifs');
-      // }
-      
-      const notificationRequest = await Notifications.requestPermissionsAsync({
-         ios: {
-            allowAlert: true,
-            allowBadge: true,
-            allowSound: true,
-            allowAnnouncements: true,
-         },
-      });
-      if (notificationRequest.status !== 'granted') {
-         alert('You need to allow notifications so you can be alerted when new orders come in!')
-         return;
-      } else {
-      }
-
-      // TODO - make this check if the same token is already present in async storage. if yes, short circuit the function
-      const token = await Notifications.getExpoPushTokenAsync();
-
-      // sending push token of device to the server to make sure that the user is notified when orders come in to the server
-      // using onAuthStateChanged to make sure it waits until firebase is initialized
-      firebase.auth().onAuthStateChanged(async user => {
-         if (user) {
-            try {
-               const response = await fetch(PUSH_TOKEN_ENDPOINT, {
-                  method: 'POST',
-                  headers: {
-                     Accept: 'application/json',
-                     'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                     clientToken: {
-                        value: token,
-                     },
-                     uuid: user.uid,
-                  }),
-               });
-               const serverResponse = await response.text();
-               console.log(serverResponse);
-            } catch (e) {
-               console.log(`the try/catch block for the fetch push token endpoint isn't working`);
-               console.log(`error.code ${e.code}`)
-               console.log(`error msg ${e.message}`);
-               console.log(`full error ${e}`)
-            }
-         } else {
-            console.log(`auth is not initialized yet or user is not signed in`);
-         }
-      });
-   }
-
    useEffect( () => {
-      registerForPushNotificationsAsync();
-      // grabOrdersFromDb();
-   },[ ])
+      grabOrdersFromDb();
+   },[ state.orders ])
 
    return (
-      <NavigationContainer>
-         <Tab.Navigator
-            tabBarOptions={{
-               activeTintColor: 'black',
-               labelStyle: {
-                  fontSize: 20
-               }
-            }}
-         >
-            <Tab.Screen name="Orders" component={OrderStackNavigator} />
-            <Tab.Screen name="Menu" component={MenuStackNavigator} />
-            <Tab.Screen name="Account" component={ProfileScreen} />
-         </Tab.Navigator>
-      </NavigationContainer>
+      <NotificationProvider>
+         <NavigationContainer>
+            <Tab.Navigator
+               tabBarOptions={{
+                  activeTintColor: 'black',
+                  labelStyle: {
+                     fontSize: 20
+                  }
+               }}
+            >
+               <Tab.Screen name="Orders" component={OrderStackNavigator} />
+               <Tab.Screen name="Menu" component={MenuStackNavigator} />
+               <Tab.Screen name="Account" component={ProfileScreen} />
+            </Tab.Navigator>
+         </NavigationContainer>
+      </NotificationProvider>
    );
 }
 export default HomeTabNavigator;

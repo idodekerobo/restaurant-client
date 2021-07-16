@@ -53,7 +53,7 @@ export default OrderQueue = (props) => {
          
          // TODO - can't figure out how to get context to properly update
             // so just triggering a refresh when a new order comes in
-         console.log('triggering order-change emit from server');
+         // console.log('triggering order-change emit from server');
          onRefresh();
       })
       return () => {
