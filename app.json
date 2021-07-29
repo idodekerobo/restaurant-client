@@ -22,7 +22,7 @@
     ],
     "ios": {
       "bundleIdentifier": "io.rhemi.rhemi",
-      "buildNumber": "0.4.0",
+      "buildNumber": "0.4.1",
       "supportsTablet": true
     }
   }

@@ -7,13 +7,13 @@ import * as Notifications from 'expo-notifications';
 // export const BASE_API_URL = 'http://localhost:5000/' 
 // export const API_URL = 'http://localhost:5000/api/';
 // NGROK TUNNELING
-export const BASE_API_URL = 'https://a6ae045138ac.ngrok.io';
-export const API_URL = 'https://a6ae045138ac.ngrok.io' + '/api/';
+// export const BASE_API_URL = 'https://a6ae045138ac.ngrok.io';
+// export const API_URL = 'https://a6ae045138ac.ngrok.io' + '/api/';
 
 // PRODUCTION
 // can make this an .env variable
-// export const BASE_API_URL = 'https://www.rhemi.co/' 
-// export const API_URL = 'https://www.rhemi.co/api/';
+export const BASE_API_URL = 'https://www.rhemi.co/' 
+export const API_URL = 'https://www.rhemi.co/api/';
 /*
 =================================================================================================================================
                                                         ERROR HANDLING
